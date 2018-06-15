@@ -16,7 +16,7 @@
     <!-- NProgress -->
     <link href="{{ asset('vendors/nprogress/nprogress.css') }}" rel="stylesheet">
     <!-- Custom Theme Style -->
-    <link href="{{ asset('css/theme-custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
   </head>
 
   <body class="nav-md">
