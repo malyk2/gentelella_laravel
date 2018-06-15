@@ -43,6 +43,7 @@
     <script src="{{ asset('vendors/nprogress/nprogress.js') }}"></script>
 
     <!-- Custom Theme Scripts -->
-    <script src="{{ asset('js/theme-custom.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+    {{-- <script src="{{ asset('js/theme-custom.js') }}"></script> --}}
   </body>
 </html>
