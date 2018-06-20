@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Group;
+use App\Http\Requests\User\AddGroup as AddGroupRequest;
 
 class UserController extends Controller
 {
@@ -25,6 +26,13 @@ class UserController extends Controller
     {
         // dd('add');
         return view('user.formGroup');
+    }
+
+    public function saveGroup(AddGroupRequest $request, Group $group)
+    {
+        dump($request->all());
+        dd($group);
+
     }
 
 }
