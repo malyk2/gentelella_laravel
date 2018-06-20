@@ -25,7 +25,7 @@
                         </ul>
                         <div class="clearfix"></div>
                     </div>
-                    <a href="{{ route('users.addGroup') }}" class="btn btn-round btn-primary" aria-label="Left Align">
+                    <a href="{{ route('user.addGroup') }}" class="btn btn-round btn-primary" aria-label="Left Align">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                     </a>
                     <div class="x_content">

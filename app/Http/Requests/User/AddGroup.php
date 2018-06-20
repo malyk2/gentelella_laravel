@@ -24,7 +24,8 @@ class AddGroup extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required'
+            'name' => 'required|max:255|unique:groups,name',
+            'parent_id' => 'required',
         ];
     }
 }

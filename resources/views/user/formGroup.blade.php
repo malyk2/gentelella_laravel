@@ -28,7 +28,7 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <form class="form-horizontal form-label-left" action="{{ route('users.saveGroup') }}" method="post">
+                        <form class="form-horizontal form-label-left" action="{{ route('user.saveGroup') }}" method="post">
                             @csrf
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Назва <span class="required">*</span>
@@ -36,6 +36,23 @@
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <input type="text" id="first-name" name="name" class="form-control col-md-7 col-xs-12 {{ $errors->has('name') ? 'parsley-error' : '' }}">
                                     {!! formErrors('name') !!}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Батьківська група</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control {{ $errors->has('parent_id') ? 'parsley-error' : '' }}" name="parent_id">
+                                        @php
+                                            $traverse = function ($groups, $prefix = '') use (&$traverse) {
+                                                foreach ($groups as $group) {
+                                                    echo '<option value="'.$group->id.'">'.$prefix.' '.$group->name.'</option>';
+                                                    $traverse($group->children, $prefix.'-');
+                                                }
+                                            };
+                                            $traverse($tree);
+                                        @endphp
+                                    </select>
+                                    {!! formErrors('parent_id') !!}
                                 </div>
                             </div>
                             <div class="ln_solid"></div>

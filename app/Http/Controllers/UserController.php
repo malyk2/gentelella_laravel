@@ -24,15 +24,17 @@ class UserController extends Controller
 
     public function addGroup()
     {
-        // dd('add');
-        return view('user.formGroup');
+        $tree = Group::descendantsAndSelf(1)->toTree();
+        return view('user.formGroup', compact('tree'));
     }
 
     public function saveGroup(AddGroupRequest $request, Group $group)
     {
-        dump($request->all());
-        dd($group);
-
+        $data = $request->validated();
+        $parent = Group::find($data['parent_id']);
+        $parent->children()->create(['name' => $data['name']]);
+        return redirect()->route('user.listGroups');
+        // dd($data);
     }
 
 }

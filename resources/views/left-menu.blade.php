@@ -29,7 +29,7 @@
             <li><a><i class="fa fa-users"></i> Користувачі <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 <li><a href="">Список користувачів</a></li>
-                <li><a href="{{ route('users.listGroups') }}">Групи користувачів</a></li>
+                <li><a href="{{ route('user.listGroups') }}">Групи користувачів</a></li>
                 {{-- <li><a href="index3.html">Dashboard3</a></li> --}}
               </ul>
             </li>
