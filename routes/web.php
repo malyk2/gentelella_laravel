@@ -20,10 +20,7 @@ Route::get('/', function () {
 //users routes
 Route::prefix('users')->group(function(){
     Route::get('groups', 'UserController@listGroups')->name('users.listGroups');
-    // Route::get('/', 'UserController@list')->name('users.list');
-    // Route::get('getItems', 'UserController@getItems')->name('users.getItems');
-    // Route::get('edit/{user}', 'UserController@edit')->name('users.edit');
-    // Route::post('save/{user?}', 'UserController@save')->name('users.save');
+    Route::get('groups/add', 'UserController@addGroup')->name('users.addGroup');
 });
 
 Route::get('/login', function () {
