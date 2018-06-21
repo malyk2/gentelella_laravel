@@ -13,7 +13,6 @@ class GroupSeeder extends Seeder
     public function run()
     {
         $data = ['name' => 'root'];
-        $group = Group::firstOrNew($data);
-        $group->save();
+        Group::firstOrCreate($data);
     }
 }

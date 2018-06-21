@@ -8,7 +8,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li class="">
             <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-              <img src="images/avatar.png" alt="">Username
+              <img src="{{ asset('images/avatar.png') }}" alt="">Username
               <span class=" fa fa-angle-down"></span>
             </a>
             <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -20,7 +20,7 @@
                 </a>
               </li>
               <li><a href="javascript:;">Help</a></li>
-              <li><a href="javascript:;"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+              <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out pull-right"></i> Вихід</a></li>
             </ul>
           </li>
 
