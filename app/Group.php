@@ -15,4 +15,28 @@ class Group extends Model
         'name'
     ];
 
+    /**Start relations */
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+    /**End relations */
+
+    /**Start Mutators*/
+    public function getFullNameAttribute()
+    {
+        $delimiter = '-';
+        $fullName = '';
+        foreach($this->ancestors as $item) {
+            $fullName .= $item->name.$delimiter;
+        }
+        $fullName .= $this->name;
+        return $fullName;
+    }
+
+    /**End mutators */
+
+    /**Start Helper*/
+    /**End Helper*/
+
 }

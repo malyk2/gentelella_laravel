@@ -4,7 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddGroup extends FormRequest
+class SaveGroup extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,6 +26,14 @@ class AddGroup extends FormRequest
         return [
             'name' => 'required|max:255|unique:groups,name',
             'parent_id' => 'required',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'назва',
+            'parent_id' => 'група',
         ];
     }
 }

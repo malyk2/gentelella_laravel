@@ -19,21 +19,17 @@ Route::get('login', 'AuthController@form')->name('auth.form');
 Route::post('login', 'AuthController@login')->name('login');
 
 //private routes
-// Route::get('/', function () {
-//     return view('home');
-// });
 Route::middleware('auth')->group(function() {
     Route::get('', 'HomeController@index')->name('home');
     Route::get('logout', 'AuthController@logout')->name('logout');
-    //users routes
     Route::prefix('users')->group(function(){
+        //users routes
+        Route::get('', 'UserController@listUsers')->name('user.listUsers');
+        Route::get('add', 'UserController@addUser')->name('user.addUser');
+        Route::post('save/{user?}', 'UserController@saveUser')->name('user.saveUser');
+        //users groups routes
         Route::get('groups', 'UserController@listGroups')->name('user.listGroups');
         Route::get('groups/add', 'UserController@addGroup')->name('user.addGroup');
         Route::post('groups/save/{group?}', 'UserController@saveGroup')->name('user.saveGroup');
     });
 });
-
-
-// Route::get('/login', function () {
-//     return view('login');
-// });

@@ -15,7 +15,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
+        'group_id',
     ];
 
     /**
@@ -26,4 +29,26 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**Start relations */
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
+    /**End relations */
+
+    /**Start Mutators*/
+    /**End mutators */
+
+    /**Start Helper*/
+    public function getAllGroups()
+    {
+        return Group::descendantsAndSelf($this->group_id);
+    }
+
+    public function getTreeAllGroups()
+    {
+        return Group::descendantsAndSelf($this->group_id)->toTree();
+    }
+    /**End Helper*/
 }

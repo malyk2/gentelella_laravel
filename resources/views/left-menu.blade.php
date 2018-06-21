@@ -12,8 +12,8 @@
           <img src="{{ asset('images/avatar.png') }}" alt="..." class="img-circle profile_img">
         </div>
         <div class="profile_info">
-          <span>Welcome,</span>
-          <h2>Username</h2>
+          <span>Користувач</span>
+          <h2>{{ auth()->user()->name }}</h2>
         </div>
         <div class="clearfix"></div>
       </div>
@@ -28,7 +28,7 @@
           <ul class="nav side-menu">
             <li><a><i class="fa fa-users"></i> Користувачі <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
-                <li><a href="">Список користувачів</a></li>
+                <li><a href="{{ route('user.listUsers') }}">Список користувачів</a></li>
                 <li><a href="{{ route('user.listGroups') }}">Групи користувачів</a></li>
                 {{-- <li><a href="index3.html">Dashboard3</a></li> --}}
               </ul>
