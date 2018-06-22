@@ -24,7 +24,7 @@ class SaveGroup extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255|unique:groups,name',
+            'name' => 'required|max:255',
             'parent_id' => 'required',
         ];
     }

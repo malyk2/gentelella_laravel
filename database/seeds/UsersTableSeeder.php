@@ -20,7 +20,7 @@ class UsersTableSeeder extends Seeder
 
         $user = User::firstOrNew($data);
         if ( ! $user->exists) {
-            $user->password = bcrypt('smartrV0815');
+            $user->password = 'smartrV0815';
         }
         $user->save();
     }

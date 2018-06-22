@@ -38,6 +38,10 @@ class User extends Authenticatable
     /**End relations */
 
     /**Start Mutators*/
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
     /**End mutators */
 
     /**Start Helper*/

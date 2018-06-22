@@ -51,9 +51,12 @@ class UserController extends Controller
         return view('user.formUser', compact('groupsTree'));
     }
 
-    public function saveUser(SaveUserRequest $request)
+    public function saveUser(SaveUserRequest $request, User $user)
     {
-        dd($request->validated());
+        $data = $request->validated();
+        $user->fill($data);
+        $user->save();
+        return redirect()->route('user.listUsers')->pnotify('Користувача створено', '','success');
     }
 
 }

@@ -30,13 +30,11 @@
                     <div class="x_content">
                         <form class="form-horizontal form-label-left" action="{{ route('user.saveUser') }}" method="post" autocomplete="nope">
                             @csrf
-                            {{-- <input type="text" name="prevent_autofill" id="prevent_autofill" value="" style="display:none;" />
-                            <input type="password" name="password_fake" id="password_fake" value="" style="display:none;" /> --}}
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Логін <span class="required">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="first-name" name="name" class="form-control col-md-7 col-xs-12 {{ $errors->has('name') ? 'parsley-error' : '' }}" value="{{ ! is_null(old('name')) ? old('name') : '' }}">
+                                <input type="text" id="first-name" name="name" class="form-control col-md-7 col-xs-12 {{ $errors->has('name') ? 'parsley-error' : '' }}" value="{{ old('name', '') }}">
                                     {!! formErrors('name') !!}
                                 </div>
                             </div>
@@ -44,7 +42,7 @@
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">E-mail <span class="required">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" id="email" name="email" class="form-control col-md-7 col-xs-12 {{ $errors->has('email') ? 'parsley-error' : '' }}" autocomplete="nope">
+                                    <input type="text" id="email" name="email" class="form-control col-md-7 col-xs-12 {{ $errors->has('email') ? 'parsley-error' : '' }}" autocomplete="nope" value="{{ old('email', '') }}">
                                     {!! formErrors('email') !!}
                                 </div>
                             </div>
@@ -64,7 +62,7 @@
                                         @php
                                             $traverse = function ($groups, $prefix = '') use (&$traverse) {
                                                 foreach ($groups as $group) {
-                                                    echo '<option value="'.$group->id.'">'.$prefix.' '.$group->name.'</option>';
+                                                    echo '<option value="'.$group->id.'"'.(old('group_id') == $group->id ? 'selected' : '').'>'.$prefix.' '.$group->name.'</option>';
                                                     $traverse($group->children, $prefix.'-');
                                                 }
                                             };
@@ -80,8 +78,6 @@
                                     <button type="submit" class="btn btn-success">Зберегти</button>
                                 </div>
                             </div>
-                            {{-- <input type="text" name="prevent_autofill" id="prevent_autofill" value="" style="display:none;" />
-                            <input type="password" name="password_fake" id="password_fake" value="" style="display:none;" /> --}}
                         </form>
                     </div>
                 </div>
