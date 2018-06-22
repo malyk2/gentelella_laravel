@@ -40,9 +40,9 @@ class UserController extends Controller
 
     public function listUsers()
     {
-        $user = auth()->user();
+        // $user = auth()->user();
         // dd($user->can('login'));
-        dd($user->can('list', User::class));
+        // dd($user->can('list', User::class));
         // dd($user->can('edit-test', User::class));
         // $this->authorize()
         // $this->authorize('index', User::class);
