@@ -1,5 +1,16 @@
 @extends('layouts.app')
+@include('modules.iCheck')
 @section('content')
+@push('js')
+<script>
+    $(function(){
+        $('input.flat').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        });
+    });
+</script>
+@endpush
 <div class="right_col" role="main">
     <div class="">
 
@@ -55,6 +66,27 @@
                                     {!! formErrors('parent_id') !!}
                                 </div>
                             </div>
+                            @can('manage', \App\Permission::class)
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Доступи
+                                </label>
+                                @if(count($permissions))
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <ul class="list-unstyled">
+                                        @foreach($permissions as $perm)
+                                        <li>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" class="flat" checked> {{ $perm->display_name }}
+                                                </label>
+                                            </div>
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                @endif
+                            </div>
+                            @endcan
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">

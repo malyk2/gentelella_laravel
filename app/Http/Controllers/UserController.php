@@ -12,26 +12,23 @@ class UserController extends Controller
 {
     public function listGroups()
     {
-        // dd('listGroups');
-        // $root = Group::find(Group::ID_ROOT);
-        // $root->children()->create(['name' => 'name1']);
-        // $root->children()->create(['name' => 'name2']);
-        // $root->child
-        // $tree = Group::descendantsAndSelf(1)->toTree();
-        // $tree = Group::descendantsAndSelf(1)->toFlatTree()->toArray();
-        // dd($tree);
+        $this->authorize('manage', Group::class);
         $tree = auth()->user()->getTreeAllGroups();
         return view('user.listGroups', compact('tree'));
     }
 
     public function addGroup()
     {
-        $tree = Group::descendantsAndSelf(1)->toTree();
-        return view('user.formGroup', compact('tree'));
+        $this->authorize('manage', Group::class);
+        $user = auth()->user();
+        $tree = $user->getTreeAllGroups();
+        $permissions = $user->group->permissions;
+        return view('user.formGroup', compact('tree', 'permissions'));
     }
 
     public function saveGroup(SaveGroupRequest $request, Group $group)
     {
+        $this->authorize('manage', Group::class);
         $data = $request->validated();
         $parent = Group::find($data['parent_id']);
         $parent->children()->create(['name' => $data['name']]);
@@ -40,12 +37,7 @@ class UserController extends Controller
 
     public function listUsers()
     {
-        // $user = auth()->user();
-        // dd($user->can('login'));
-        // dd($user->can('list', User::class));
-        // dd($user->can('edit-test', User::class));
-        // $this->authorize()
-        // $this->authorize('index', User::class);
+        $this->authorize('manage', User::class);
         $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
         $users = User::with('group.ancestors')->whereIn('group_id', $userGroupsIds)->get();
         return view('user.listUsers', compact('users'));
@@ -53,12 +45,14 @@ class UserController extends Controller
 
     public function addUser()
     {
+        $this->authorize('manage', User::class);
         $groupsTree = auth()->user()->getTreeAllGroups();
         return view('user.formUser', compact('groupsTree'));
     }
 
     public function saveUser(SaveUserRequest $request, User $user)
     {
+        $this->authorize('manage', User::class);
         $data = $request->validated();
         $user->fill($data);
         $user->save();

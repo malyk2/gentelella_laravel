@@ -19,21 +19,8 @@ class UserPolicy
 
     }
 
-    // public function before(User $user, $ability)
-    // {
-    //     // \Log::info('user.'.$ability);
-    //     // return $user->checkPerms('user.'.$ability);
-    // }
-
-    public function index(User $user)
+    public function manage(User $user)
     {
-        // dd($user);
-        return true;
-    }
-
-    public function editTest(User $user)
-    {
-        // dd('editTest');
-        return true;
+        return $user->hasPerm('users.manage');
     }
 }

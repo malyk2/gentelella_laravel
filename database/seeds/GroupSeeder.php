@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Group;
+use App\Permission;
 
 class GroupSeeder extends Seeder
 {
@@ -13,6 +14,9 @@ class GroupSeeder extends Seeder
     public function run()
     {
         $data = ['name' => 'root'];
-        Group::firstOrCreate($data);
+        $group = Group::firstOrCreate($data);
+
+        $allPerms = Permission::get();
+        $group->permissions()->sync($allPerms);
     }
 }

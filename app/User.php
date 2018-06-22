@@ -49,6 +49,13 @@ class User extends Authenticatable
     /**End mutators */
 
     /**Start Helper*/
+    public function hasPerm(...$perms)
+    {
+        foreach ($perms as $perm) {
+            return $this->group->permissions->contains('name', $perm);
+        }
+    }
+
     public function getAllGroups()
     {
         return Group::descendantsAndSelf($this->group_id);

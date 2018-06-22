@@ -20,6 +20,11 @@ class Group extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class)->withTimestamps();
+    }
     /**End relations */
 
     /**Start Mutators*/
