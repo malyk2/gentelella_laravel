@@ -31,8 +31,10 @@ class UserController extends Controller
         $this->authorize('manage', Group::class);
         $data = $request->validated();
         $parent = Group::find($data['parent_id']);
-        $parent->children()->create(['name' => $data['name']]);
-        return redirect()->route('user.listGroups');
+        $group = $parent->children()->create(['name' => $data['name']]);
+        $perms = array_key_exists('perms', $data) ? array_keys($data['perms']) : [];
+        $group->permissions()->sync($perms);
+        return redirect()->route('user.listGroups')->pnotify('Дані збережено', '','success');
     }
 
     public function listUsers()
@@ -56,7 +58,7 @@ class UserController extends Controller
         $data = $request->validated();
         $user->fill($data);
         $user->save();
-        return redirect()->route('user.listUsers')->pnotify('Користувача створено', '','success');
+        return redirect()->route('user.listUsers')->pnotify('Дані збережено', '','success');
     }
 
 }

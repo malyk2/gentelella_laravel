@@ -77,7 +77,7 @@
                                         <li>
                                             <div class="checkbox">
                                                 <label>
-                                                    <input type="checkbox" class="flat" checked> {{ $perm->display_name }}
+                                                    <input type="checkbox" class="flat" name="perms[{{ $perm->id }}]" value="true"> {{ $perm->display_name }}
                                                 </label>
                                             </div>
                                         </li>
