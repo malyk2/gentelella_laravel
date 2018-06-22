@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\Auth\Login as LoginRequests;
+use App\Exceptions\PermissionException;
 
 class AuthController extends Controller
 {
@@ -16,6 +17,7 @@ class AuthController extends Controller
     {
         $data = $request->validated();
         if (auth()->attempt($data)) {
+            $this->authorize('login');
             return redirect()->intended(route('home'))->pnotify('Авторизація успішна', '', 'success');
         } else {
             return redirect()->back()->pnotify('Помилка', 'Невірний логін та/або пароль', 'error');

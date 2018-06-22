@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -48,4 +49,13 @@ class Handler extends ExceptionHandler
     {
         return parent::render($request, $exception);
     }
+
+    protected function prepareResponse($request, Exception $e)
+    {
+        if ($e instanceof AccessDeniedHttpException) {
+            throw new PermissionException("", 1);
+        }
+        return parent::prepareResponse($request, $e);
+    }
+
 }
