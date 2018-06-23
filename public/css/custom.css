@@ -735,7 +735,8 @@ a:focus {
     text-decoration: none;
     background: transparent
 }
-.nav.child_menu {
+/* .nav.child_menu:not('.active') { */
+.nav.child_menu:not('.active') {
     display: none
 }
 .nav.child_menu li:hover,

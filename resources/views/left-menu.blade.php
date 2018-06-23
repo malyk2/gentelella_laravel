@@ -26,11 +26,11 @@
         <div class="menu_section">
           <h3>Управління</h3>
           <ul class="nav side-menu">
-            <li><a><i class="fa fa-users"></i> Користувачі <span class="fa fa-chevron-down"></span></a>
-              <ul class="nav child_menu">
-                <li><a href="{{ route('user.listUsers') }}">Список користувачів</a></li>
+            <li class="active">
+              <a><i class="fa fa-users"></i> Користувачі <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu {{ request()->routeIs('user*') ? 'active' : ''}}">
+                <li class="{{ request()->routeIs('user.listUsers') ? 'current-page' : '' }}"><a href="{{ route('user.listUsers') }}">Список користувачів</a></li>
                 <li><a href="{{ route('user.listGroups') }}">Групи користувачів</a></li>
-                {{-- <li><a href="index3.html">Dashboard3</a></li> --}}
               </ul>
             </li>
             {{-- <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
