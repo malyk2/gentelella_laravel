@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+  @include('modules.pnotify')
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
@@ -8,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Smart services</title>
-    <link rel=icon href=favicon.png sizes="16x16" type="image/png">
+    <link rel=icon href={{ asset('favicon.png') }} sizes="16x16" type="image/png">
     <!-- Bootstrap -->
     <link href="{{ asset('vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Font Awesome -->
@@ -17,6 +18,8 @@
     <link href="{{ asset('vendors/nprogress/nprogress.css') }}" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+
+    @stack('css')
   </head>
 
   <body class="nav-md">
@@ -44,6 +47,7 @@
 
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    @stack('js')
     {{-- <script src="{{ asset('js/theme-custom.js') }}"></script> --}}
   </body>
 </html>

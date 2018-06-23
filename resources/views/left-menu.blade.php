@@ -9,11 +9,11 @@
       <!-- menu profile quick info -->
       <div class="profile clearfix">
         <div class="profile_pic">
-          <img src="images/avatar.png" alt="..." class="img-circle profile_img">
+          <img src="{{ asset('images/avatar.png') }}" alt="..." class="img-circle profile_img">
         </div>
         <div class="profile_info">
-          <span>Welcome,</span>
-          <h2>Username</h2>
+          <span>Користувач</span>
+          <h2>{{ auth()->user()->name }}</h2>
         </div>
         <div class="clearfix"></div>
       </div>
@@ -22,11 +22,18 @@
       <br />
 
       <!-- sidebar menu -->
-      {{-- <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+      <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
         <div class="menu_section">
-          <h3>General</h3>
+          <h3>Управління</h3>
           <ul class="nav side-menu">
-            <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa fa-users"></i> Користувачі <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{{ route('user.listUsers') }}">Список користувачів</a></li>
+                <li><a href="{{ route('user.listGroups') }}">Групи користувачів</a></li>
+                {{-- <li><a href="index3.html">Dashboard3</a></li> --}}
+              </ul>
+            </li>
+            {{-- <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 <li><a href="index.html">Dashboard</a></li>
                 <li><a href="index2.html">Dashboard2</a></li>
@@ -118,11 +125,10 @@
                   </li>
               </ul>
             </li>
-            <li><a href="javascript:void(0)"><i class="fa fa-laptop"></i> Landing Page <span class="label label-success pull-right">Coming Soon</span></a></li>
+            <li><a href="javascript:void(0)"><i class="fa fa-laptop"></i> Landing Page <span class="label label-success pull-right">Coming Soon</span></a></li> --}}
           </ul>
         </div>
-
-      </div> --}}
+      </div>
       <!-- /sidebar menu -->
 
       <!-- /menu footer buttons -->
