@@ -14,7 +14,7 @@ class UsersTableSeeder extends Seeder
     {
         $data = [
             'group_id' => 1,
-            'name' => 'admin',
+            'name' => User::ROOT_NAME,
             'email' => 'admin@renome.ua',
         ];
 

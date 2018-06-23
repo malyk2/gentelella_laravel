@@ -10,6 +10,7 @@ class User extends Authenticatable
 {
     use Notifiable, SoftDeletes;
 
+    const ROOT_NAME = 'admin';
     /**
      * The attributes that are mass assignable.
      *
@@ -65,12 +66,17 @@ class User extends Authenticatable
 
     public function canEdit()
     {
-        return $this->name !== 'admin';
+        return ! $this->isRoot();
     }
 
     public function canDelete()
     {
-        return $this->name !== 'admin';
+        return ! $this->isRoot();
+    }
+
+    public function isRoot()
+    {
+        return $this->name == self::ROOT_NAME;
     }
     /**End Helper*/
 }

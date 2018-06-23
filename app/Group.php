@@ -52,12 +52,12 @@ class Group extends Model
     /**Start Helper*/
     public function canEdit()
     {
-        return $this->parent_id !== null;
+        return ! $this->isRoot();
     }
 
     public function canDelete()
     {
-        return $this->parent_id !== null;
+        return ! $this->isRoot();
     }
 
     public function isRoot()
