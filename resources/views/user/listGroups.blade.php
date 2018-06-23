@@ -1,5 +1,36 @@
 @extends('layouts.app')
 @section('content')
+@push('js')
+<script>
+    $(function(){
+        $('.delete-item').on('click', function(e){
+            e.preventDefault();
+            new PNotify({
+                title: 'Підтвердження',
+                text: 'Ця дія видалить всі підгрупи.<br>Ви впевнені?',
+                icon: 'glyphicon glyphicon-question-sign',
+                hide: true,
+                confirm: {
+                    confirm: true
+                },
+                buttons: {
+                    closer: false,
+                    sticker: false
+                },
+                history: {
+                    history: false
+                },
+                addclass: 'stack-modal',
+                stack: {'dir1': 'down', 'dir2': 'right', 'modal': true}
+                }).get().on('pnotify.confirm', function(){
+                    window.location.href = $(e.currentTarget).attr('href');
+                }).on('pnotify.cancel', function(){
+
+                });
+        });
+    });
+</script>
+@endpush
 <div class="right_col" role="main">
     <div class="">
         <div class="clearfix"></div>
@@ -33,14 +64,33 @@
                             <thead>
                                 <tr>
                                     <th>Назва</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
-                                    $traverse = function ($categories, $prefix = '') use (&$traverse) {
-                                        foreach ($categories as $category) {
-                                            echo '<tr><td>'.$prefix.' '.$category->name.'</td></tr>';
-                                            $traverse($category->children, $prefix.'-');
+                                    $traverse = function ($groups, $prefix = '') use (&$traverse) {
+                                        foreach ($groups as $group) {
+                                            echo '<tr>';
+                                            echo '<td>';
+                                                echo $prefix.' '.$group->name;
+                                            echo '</td>';
+                                            echo '<td class="text-center">';
+                                                echo '<div class="btn-group">
+                                                    <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-sm" type="button" aria-expanded="false"> <span class="caret"></span>
+                                                        </button>
+                                                    <ul role="menu" class="dropdown-menu">';
+                                                        if($group->canEdit()) {
+                                                            echo '<li><a href="'.route('user.editGroup', [$group->id]).'">Редагувати</button></li>';
+                                                        }
+                                                        if($group->canDelete()) {
+                                                            echo '<li><a class="delete-item" href="'.route('user.deleteGroup', [$group->id]).'">Видалити</button></li>';
+                                                        }
+                                                    echo '</ul>
+                                                    </div>';
+                                            echo '</td>';
+                                            echo '</tr>';
+                                            $traverse($group->children, $prefix.'-');
                                         }
                                     };
                                     $traverse($tree);

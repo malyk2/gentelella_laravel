@@ -3,17 +3,18 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Kalnoy\Nestedset\NodeTrait;
 
 class Group extends Model
 {
-    use NodeTrait;
-
-    const ID_ROOT = 1;
+    use SoftDeletes, NodeTrait;
 
     protected $fillable = [
         'name'
     ];
+
+    protected $dates = ['deleted_at'];
 
     /**Start relations */
     public function users()
@@ -42,6 +43,15 @@ class Group extends Model
     /**End mutators */
 
     /**Start Helper*/
+    public function canEdit()
+    {
+        return $this->parent_id !== null;
+    }
+
+    public function canDelete()
+    {
+        return $this->parent_id !== null;
+    }
     /**End Helper*/
 
 }

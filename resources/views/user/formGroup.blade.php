@@ -20,18 +20,12 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Створення групи користувачів</h2>
+                        <h2>{{ empty($item) ? 'Створення' : 'Редагування' }} групи користувачів</h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Settings 1</a>
-                                    </li>
-                                    <li><a href="#">Settings 2</a>
-                                    </li>
-                                </ul>
                             </li>
                             <li><a class="close-link"><i class="fa fa-close"></i></a>
                             </li>
@@ -39,13 +33,13 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <form class="form-horizontal form-label-left" action="{{ route('user.saveGroup') }}" method="post">
+                        <form class="form-horizontal form-label-left" action="{{ route('user.saveGroup', [ ! empty($item) ? $item->id : null ]) }}" method="post">
                             @csrf
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Назва <span class="required">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" id="first-name" name="name" class="form-control col-md-7 col-xs-12 {{ $errors->has('name') ? 'parsley-error' : '' }}">
+                                <input type="text" id="first-name" name="name" class="form-control col-md-7 col-xs-12 {{ $errors->has('name') ? 'parsley-error' : '' }}" value="{{ ! empty($item) ? $item->name : '' }}">
                                     {!! formErrors('name') !!}
                                 </div>
                             </div>
@@ -54,9 +48,10 @@
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <select class="form-control {{ $errors->has('parent_id') ? 'parsley-error' : '' }}" name="parent_id">
                                         @php
-                                            $traverse = function ($groups, $prefix = '') use (&$traverse) {
+                                            $item = ! empty($item) ? $item : null;
+                                            $traverse = function ($groups, $prefix = '') use (&$traverse, $item) {
                                                 foreach ($groups as $group) {
-                                                    echo '<option value="'.$group->id.'">'.$prefix.' '.$group->name.'</option>';
+                                                    echo '<option value="'.$group->id.'"'.( ! empty($item) && $item->parent_id == $group->id ? 'selected' : '' ).'>'.$prefix.' '.$group->name.'</option>';
                                                     $traverse($group->children, $prefix.'-');
                                                 }
                                             };
@@ -77,7 +72,7 @@
                                         <li>
                                             <div class="checkbox">
                                                 <label>
-                                                    <input type="checkbox" class="flat" name="perms[{{ $perm->id }}]" value="true"> {{ $perm->display_name }}
+                                                    <input type="checkbox" class="flat" name="perms[{{ $perm->id }}]" {{ ! empty($item) && $item->permissions->contains('id', $perm->id) ? 'checked' : '' }} value="true"> {{ $perm->display_name }}
                                                 </label>
                                             </div>
                                         </li>

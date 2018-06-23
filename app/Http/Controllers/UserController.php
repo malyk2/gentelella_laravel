@@ -26,15 +26,34 @@ class UserController extends Controller
         return view('user.formGroup', compact('tree', 'permissions'));
     }
 
+    public function editGroup(Group $group)
+    {
+        $item = $group->load('permissions', 'users');
+        $user = auth()->user();
+        $tree = $user->getTreeAllGroups();
+        $permissions = $user->group->permissions;
+        return view('user.formGroup', compact('item', 'tree', 'permissions'));
+    }
+
     public function saveGroup(SaveGroupRequest $request, Group $group)
     {
         $this->authorize('manage', Group::class);
         $data = $request->validated();
         $parent = Group::find($data['parent_id']);
-        $group = $parent->children()->create(['name' => $data['name']]);
+        if ( ! $group->exists ) {
+            $group = $parent->children()->create(['name' => $data['name']]);
+        } else {
+            $group->update(['name' => $data['name']]);
+        }
         $perms = array_key_exists('perms', $data) ? array_keys($data['perms']) : [];
         $group->permissions()->sync($perms);
         return redirect()->route('user.listGroups')->pnotify('Дані збережено', '','success');
+    }
+
+    public function deleteGroup(Group $group)
+    {
+        $group->delete();
+        return redirect()->route('user.listGroups')->pnotify('Групу видалено.', '','success');
     }
 
     public function listUsers()
