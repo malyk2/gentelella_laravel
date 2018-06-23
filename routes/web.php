@@ -22,6 +22,9 @@ Route::post('login', 'AuthController@login')->name('login');
 Route::middleware('auth')->group(function() {
     Route::get('', 'HomeController@index')->name('home');
     Route::get('logout', 'AuthController@logout')->name('logout');
+    Route::get('profile', 'HomeController@profileForm')->name('profile.form');
+    Route::post('profile', 'HomeController@profileSave')->name('profile.save');
+    Route::post('profile/changePassword', 'HomeController@changePassword')->name('profile.changePassword');
     Route::prefix('users')->group(function(){
         //users routes
         Route::get('', 'UserController@listUsers')->name('user.listUsers');
