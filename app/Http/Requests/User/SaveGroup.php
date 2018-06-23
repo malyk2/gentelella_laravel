@@ -25,7 +25,7 @@ class SaveGroup extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'parent_id' => 'required',
+            'parent_id' => ! $this->group ? 'required' : '',
             'perms' => 'array',
         ];
     }

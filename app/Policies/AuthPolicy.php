@@ -21,8 +21,6 @@ class AuthPolicy
 
     public function login(User $user)
     {
-        $has = $user->hasPerm('login');
-        $has ?: auth()->logout();
-        return $has;
+        return $user->hasPerm('login');
     }
 }

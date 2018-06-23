@@ -26,7 +26,9 @@ Route::middleware('auth')->group(function() {
         //users routes
         Route::get('', 'UserController@listUsers')->name('user.listUsers');
         Route::get('add', 'UserController@addUser')->name('user.addUser');
+        Route::get('edit/{user}', 'UserController@editUser')->name('user.editUser');
         Route::post('save/{user?}', 'UserController@saveUser')->name('user.saveUser');
+        Route::get('delete/{user}', 'UserController@deleteUser')->name('user.deleteUser');
         //users groups routes
         Route::get('groups', 'UserController@listGroups')->name('user.listGroups');
         Route::get('groups/add', 'UserController@addGroup')->name('user.addGroup');

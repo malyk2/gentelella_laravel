@@ -39,8 +39,8 @@ class UserController extends Controller
     {
         $this->authorize('manage', Group::class);
         $data = $request->validated();
-        $parent = Group::find($data['parent_id']);
         if ( ! $group->exists ) {
+            $parent = Group::find($data['parent_id']);
             $group = $parent->children()->create(['name' => $data['name']]);
         } else {
             $group->update(['name' => $data['name']]);
@@ -60,7 +60,7 @@ class UserController extends Controller
     {
         $this->authorize('manage', User::class);
         $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
-        $users = User::with('group.ancestors')->whereIn('group_id', $userGroupsIds)->get();
+        $users = User::with('group.ancestors')->whereIn('group_id', $userGroupsIds)->where('id', '<>', auth()->id())->get();
         return view('user.listUsers', compact('users'));
     }
 
@@ -71,6 +71,14 @@ class UserController extends Controller
         return view('user.formUser', compact('groupsTree'));
     }
 
+    public function editUser(User $user)
+    {
+        $this->authorize('manage', User::class);
+        $item = $user->load('group');
+        $groupsTree = auth()->user()->getTreeAllGroups();
+        return view('user.formUser', compact('item', 'groupsTree'));
+    }
+
     public function saveUser(SaveUserRequest $request, User $user)
     {
         $this->authorize('manage', User::class);
@@ -78,6 +86,12 @@ class UserController extends Controller
         $user->fill($data);
         $user->save();
         return redirect()->route('user.listUsers')->pnotify('Дані збережено', '','success');
+    }
+
+    public function deleteUser(User $user)
+    {
+        $user->delete();
+        return redirect()->route('user.listUsers')->pnotify('Користувача видалено.', '','success');
     }
 
 }

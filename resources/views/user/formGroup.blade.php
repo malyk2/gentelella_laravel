@@ -46,7 +46,10 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Батьківська група</label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control {{ $errors->has('parent_id') ? 'parsley-error' : '' }}" name="parent_id">
+                                    <select class="form-control {{ $errors->has('parent_id') ? 'parsley-error' : '' }}" {{ ! empty($item) ? 'disabled' : '' }} name="parent_id">
+                                        @if( ! empty($item) && $item->parent->isRoot())
+                                            <option value="{{ $item->parent->id }}">{{ $item->parent->name }}</option>
+                                        @else
                                         @php
                                             $item = ! empty($item) ? $item : null;
                                             $traverse = function ($groups, $prefix = '') use (&$traverse, $item) {
@@ -57,6 +60,7 @@
                                             };
                                             $traverse($tree);
                                         @endphp
+                                        @endif
                                     </select>
                                     {!! formErrors('parent_id') !!}
                                 </div>

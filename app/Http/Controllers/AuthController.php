@@ -17,7 +17,10 @@ class AuthController extends Controller
     {
         $data = $request->validated();
         if (auth()->attempt($data)) {
-            $this->authorize('login');
+            if ( ! auth()->user()->can('login')) {
+                auth()->logout();
+                return redirect()->back()->pnotify('Доступ заборонено', '','error');
+            }
             return redirect()->intended(route('home'))->pnotify('Авторизація успішна', '', 'success');
         } else {
             return redirect()->back()->pnotify('Помилка', 'Невірний логін та/або пароль', 'error');

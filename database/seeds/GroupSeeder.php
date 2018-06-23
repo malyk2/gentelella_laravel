@@ -13,7 +13,7 @@ class GroupSeeder extends Seeder
      */
     public function run()
     {
-        $data = ['name' => 'root'];
+        $data = ['name' => Group::ROOT_NAME];
         $group = Group::firstOrCreate($data);
 
         $allPerms = Permission::get();

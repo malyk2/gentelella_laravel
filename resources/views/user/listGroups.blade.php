@@ -76,6 +76,7 @@
                                                 echo $prefix.' '.$group->name;
                                             echo '</td>';
                                             echo '<td class="text-center">';
+                                                if($group->canEdit() || $group->canDelete()){
                                                 echo '<div class="btn-group">
                                                     <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-sm" type="button" aria-expanded="false"> <span class="caret"></span>
                                                         </button>
@@ -88,6 +89,7 @@
                                                         }
                                                     echo '</ul>
                                                     </div>';
+                                                }
                                             echo '</td>';
                                             echo '</tr>';
                                             $traverse($group->children, $prefix.'-');

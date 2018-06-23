@@ -10,6 +10,8 @@ class Group extends Model
 {
     use SoftDeletes, NodeTrait;
 
+    const ROOT_NAME = 'root';
+
     protected $fillable = [
         'name'
     ];
@@ -25,6 +27,11 @@ class Group extends Model
     public function permissions()
     {
         return $this->belongsToMany(Permission::class)->withTimestamps();
+    }
+
+    public function paarent()
+    {
+        return $this->belongsTo(Group::class);
     }
     /**End relations */
 
@@ -51,6 +58,11 @@ class Group extends Model
     public function canDelete()
     {
         return $this->parent_id !== null;
+    }
+
+    public function isRoot()
+    {
+        return $this->name == self::ROOT_NAME;
     }
     /**End Helper*/
 

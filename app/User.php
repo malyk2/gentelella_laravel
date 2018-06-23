@@ -4,10 +4,11 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -30,10 +31,6 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    // protected $with = [
-    //     'group'
-    // ];
-
     /**Start relations */
     public function group()
     {
@@ -44,7 +41,7 @@ class User extends Authenticatable
     /**Start Mutators*/
     public function setPasswordAttribute($value)
     {
-        $this->attributes['password'] = bcrypt($value);
+        ! empty($value) ? $this->attributes['password'] = bcrypt($value) : false;
     }
     /**End mutators */
 
@@ -64,6 +61,16 @@ class User extends Authenticatable
     public function getTreeAllGroups()
     {
         return Group::descendantsAndSelf($this->group_id)->toTree();
+    }
+
+    public function canEdit()
+    {
+        return $this->name !== 'admin';
+    }
+
+    public function canDelete()
+    {
+        return $this->name !== 'admin';
     }
     /**End Helper*/
 }

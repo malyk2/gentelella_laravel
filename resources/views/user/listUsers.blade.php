@@ -36,6 +36,7 @@
                                     <th>Логін</th>
                                     <th>E-mail</th>
                                     <th>Група</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,6 +50,27 @@
                                         </td>
                                         <td>
                                             {{ $user->group->full_name }}
+                                        </td>
+                                        <td class="text-center">
+                                            @if($user->canEdit() || $user->canDelete())
+                                                <div class="btn-group">
+                                                    <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-sm" type="button" aria-expanded="false">
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul role="menu" class="dropdown-menu">
+                                                        @if($user->canEdit())
+                                                            <li>
+                                                                <a href="{{ route('user.editUser', [$user->id]) }}">Редагувати</a>
+                                                            </li>
+                                                        @endif
+                                                        @if($user->canDelete())
+                                                            <li>
+                                                                <a href="{{ route('user.deleteUser', [$user->id]) }}">Видалити</a>
+                                                            </li>
+                                                        @endif
+                                                    </ul>
+                                                </div>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
