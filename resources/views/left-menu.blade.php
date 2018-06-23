@@ -26,13 +26,19 @@
         <div class="menu_section">
           <h3>Управління</h3>
           <ul class="nav side-menu">
+            @permission('users.manage', 'groups.manage')
             <li class="active">
               <a><i class="fa fa-users"></i> Користувачі <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu {{ request()->routeIs('user*') ? 'active' : ''}}">
-                <li class="{{ request()->routeIs('user.listUsers') ? 'current-page' : '' }}"><a href="{{ route('user.listUsers') }}">Список користувачів</a></li>
-                <li><a href="{{ route('user.listGroups') }}">Групи користувачів</a></li>
+                @permission('users.manage')
+                  <li class="{{ request()->routeIs('user.listUsers') ? 'current-page' : '' }}"><a href="{{ route('user.listUsers') }}">Список користувачів</a></li>
+                @endpermission
+                @permission('groups.manage')
+                  <li><a href="{{ route('user.listGroups') }}">Групи користувачів</a></li>
+                @endpermission
               </ul>
             </li>
+            @endpermission
             {{-- <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 <li><a href="index.html">Dashboard</a></li>
