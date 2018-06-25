@@ -26,7 +26,7 @@
         <div class="menu_section">
           <h3>Управління</h3>
           <ul class="nav side-menu">
-            @permission('users.manage', 'groups.manage')
+            @permission(['users.manage', 'groups.manage'])
             <li class="active">
               <a><i class="fa fa-users"></i> Користувачі <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu {{ request()->routeIs('user*') ? 'active' : ''}}">

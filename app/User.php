@@ -47,10 +47,19 @@ class User extends Authenticatable
     /**End mutators */
 
     /**Start Helper*/
-    public function hasPerm(...$perms)
+    public function hasPerm($perms, $strict = false)
     {
-        foreach ($perms as $perm) {
-            return $this->group->permissions->contains('name', $perm);
+        if( is_array($perms)) {
+            foreach($perms as $perm) {
+                $hasPerm = $this->hasPerm($perm);
+                if ($hasPerm && ! $strict) {
+                    return true;
+                } elseif ( ! $hasPerm && $strict) {
+                    return false;
+                }
+            }
+        } else {
+            return $this->group->permissions->contains('name', $perms);
         }
     }
 
