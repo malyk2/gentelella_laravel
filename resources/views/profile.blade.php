@@ -3,6 +3,7 @@
 <div class="right_col" role="main">
     <div class="">
         <div class="clearfix"></div>
+        {{ Breadcrumbs::render('profile') }}
         <div class="row">
         <div class="col-md-6 col-sm-6 col-xs-6">
             <div class="x_panel">
