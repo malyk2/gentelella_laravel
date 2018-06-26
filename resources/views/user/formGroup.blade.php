@@ -13,7 +13,6 @@
 @endpush
 <div class="right_col" role="main">
     <div class="">
-        {{-- {{ Breadcrumbs::render('user.listGroups') }} --}}
         {{ Breadcrumbs::render('user.editAddGroup', ! empty($item) ? $item : null) }}
         <div class="clearfix"></div>
 
@@ -67,25 +66,30 @@
                                 </div>
                             </div>
                             @can('manage', \App\Permission::class)
-                            <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Доступи
-                                </label>
                                 @if(count($permissions))
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <ul class="list-unstyled">
-                                        @foreach($permissions as $perm)
-                                        <li>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" class="flat" name="perms[{{ $perm->id }}]" {{ ! empty($item) && $item->permissions->contains('id', $perm->id) ? 'checked' : '' }} value="true"> {{ $perm->display_name }}
-                                                </label>
-                                            </div>
-                                        </li>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Доступи
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        @foreach($permissions as $type => $perms)
+                                            <label class="control-label col-md-3" for="first-name">{{ $type }}
+                                            </label>
+                                            </br>
+                                            <ul class="list-unstyled col-md-9">
+                                            @foreach($perms as $perm)
+                                                <li>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" class="flat" name="perms[{{ $perm->id }}]" {{ ! empty($item) && $item->permissions->contains('id', $perm->id) ? 'checked' : '' }} value="true"> {{ $perm->display_name }}
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                            </ul>
                                         @endforeach
-                                    </ul>
+                                    </div>
                                 </div>
                                 @endif
-                            </div>
                             @endcan
                             <div class="ln_solid"></div>
                             <div class="form-group">

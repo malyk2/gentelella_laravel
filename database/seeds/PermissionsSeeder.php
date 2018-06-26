@@ -13,14 +13,15 @@ class PermissionsSeeder extends Seeder
     public function run()
     {
         $data = [
-            ['name' => 'login', 'display_name' => 'Вхід в систему'],
-            ['name' => 'users.manage', 'display_name' => 'Управління користувачами'],
-            ['name' => 'groups.manage', 'display_name' => 'Управління групами користувачів'],
-            ['name' => 'permissions.manage', 'display_name' => 'Управління доступами користувачів'],
+            ['name' => 'login', 'display_name' => 'Вхід в систему', 'type' => 'Авторизація'],
+            ['name' => 'users.manage', 'display_name' => 'Управління користувачами', 'type' => 'Користувачі'],
+            ['name' => 'groups.manage', 'display_name' => 'Управління групами користувачів', 'type' => 'Користувачі'],
+            ['name' => 'permissions.manage', 'display_name' => 'Управління доступами користувачів', 'type' => 'Користувачі'],
         ];
         foreach($data as $item) {
             $perm = Permission::firstOrCreate(['name' => $item['name']]);
             $perm->display_name = $item['display_name'];
+            $perm->type = $item['type'];
             $perm->save();
         }
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Group;
 use App\User;
+use App\Permission;
 use App\Http\Requests\User\SaveGroup as SaveGroupRequest;
 use App\Http\Requests\User\SaveUser as SaveUserRequest;
 
@@ -22,7 +23,7 @@ class UserController extends Controller
         $this->authorize('manage', Group::class);
         $user = auth()->user();
         $tree = $user->getTreeAllGroups();
-        $permissions = $user->group->permissions;
+        $permissions = $user->group->permissions->groupBy('type');
         return view('user.formGroup', compact('tree', 'permissions'));
     }
 
@@ -32,7 +33,7 @@ class UserController extends Controller
         $item = $group->load('permissions', 'users');
         $user = auth()->user();
         $tree = $user->getTreeAllGroups();
-        $permissions = $user->group->permissions;
+        $permissions = $user->group->permissions->groupBy('type');
         return view('user.formGroup', compact('item', 'tree', 'permissions'));
     }
 
@@ -46,8 +47,10 @@ class UserController extends Controller
         } else {
             $group->update(['name' => $data['name']]);
         }
-        $perms = array_key_exists('perms', $data) ? array_keys($data['perms']) : [];
-        $group->permissions()->sync($perms);
+        if (auth()->user()->can('manage', Permission::class)) {
+            $perms = array_key_exists('perms', $data) ? array_keys($data['perms']) : [];
+            $group->permissions()->sync($perms);
+        }
         return redirect()->route('user.listGroups')->pnotify('Дані збережено', '','success');
     }
 

@@ -7,7 +7,7 @@
             e.preventDefault();
             new PNotify({
                 title: 'Підтвердження',
-                text: 'Ця дія видалить всі підгрупи.<br>Ви впевнені?',
+                text: 'Ця дія видалить всі підгрупи та користувачів з групи і підгруп.<br>Ви впевнені?',
                 icon: 'glyphicon glyphicon-question-sign',
                 hide: true,
                 confirm: {
