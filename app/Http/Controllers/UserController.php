@@ -105,7 +105,7 @@ class UserController extends Controller
 
     public function listRoles()
     {
-        $this->authorize('manage', User::class);
+        $this->authorize('manage', Role::class);
         $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
         $roles = Role::with('group.ancestors')->whereIn('group_id', $userGroupsIds)->get();
         return view('user.listRoles', compact('roles'));
@@ -113,16 +113,14 @@ class UserController extends Controller
 
     public function addRole()
     {
-        // $qw = Group::find(1);
-        // dd($qw->permissions);
-        // dd('stop');
-        // $this->authorize('manage', User::class);
+        $this->authorize('manage', Role::class);
         $groupsTree = auth()->user()->getTreeAllGroups();
         return view('user.formRole', compact('groupsTree'));
     }
 
     public function saveRole(SaveRoleRequest $request, Role $role)
     {
+        $this->authorize('manage', Role::class);
         $data = $request->validated();
         $role->fill($data);
         $role->save();
@@ -130,11 +128,12 @@ class UserController extends Controller
             $perms = array_key_exists('perms', $data) ? array_keys($data['perms']) : [];
             $role->permissions()->sync($perms);
         // }
-        return redirect()->route('user.listRoles')->pnotify('Дані збережено', 'Успіх','success');
+        return redirect()->route('user.listRoles')->pnotify('Успіх', 'Дані збережено', 'success');
     }
 
     public function editRole(Role $role)
     {
+        $this->authorize('edit', $role);
         $item = $role->load('group.permissions');
         $groupsTree = auth()->user()->getTreeAllGroups();
         return view('user.formRole', compact('item', 'groupsTree'));

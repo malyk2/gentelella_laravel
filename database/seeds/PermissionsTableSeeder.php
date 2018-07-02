@@ -17,6 +17,7 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'users.manage', 'display_name' => 'Управління користувачами', 'type' => 'Користувачі'],
             ['name' => 'groups.manage', 'display_name' => 'Управління групами користувачів', 'type' => 'Користувачі'],
             ['name' => 'permissions.groups', 'display_name' => 'Управління доступами груп користувачів', 'type' => 'Користувачі'],
+            ['name' => 'roles.manage', 'display_name' => 'Управління ролями користувачів', 'type' => 'Користувачі'],
         ];
         foreach($data as $item) {
             $perm = Permission::firstOrCreate(['name' => $item['name']]);

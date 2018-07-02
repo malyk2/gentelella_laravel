@@ -4,8 +4,9 @@ namespace App\Policies;
 
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Role;
 
-class PermissionPolicy
+class RolePolicy
 {
     use HandlesAuthorization;
 
@@ -19,8 +20,13 @@ class PermissionPolicy
         //
     }
 
-    public function groups(User $user)
+    public function manage(User $user)
     {
-        return $user->hasPerm('permissions.groups');
+        return $user->hasPerm('roles.manage');
+    }
+
+    public function edit(User $user, Role $role)
+    {
+        return ($this->manage($user) && true);
     }
 }
