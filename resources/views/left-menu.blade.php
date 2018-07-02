@@ -36,6 +36,7 @@
                 @permission('groups.manage')
                   <li><a href="{{ route('user.listGroups') }}">Групи користувачів</a></li>
                 @endpermission
+                  <li><a href="{{ route('user.listRoles') }}">Ролі користувачів</a></li>
               </ul>
             </li>
             @endpermission

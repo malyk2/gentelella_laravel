@@ -10,6 +10,7 @@ class Group extends Model
 {
     use SoftDeletes, NodeTrait;
 
+    const ROOT_ID = 1;
     const ROOT_NAME = 'root';
 
     protected $fillable = [

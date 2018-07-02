@@ -38,5 +38,7 @@ Route::middleware('auth')->group(function() {
         Route::get('groups/edit/{group}', 'UserController@editGroup')->name('user.editGroup');
         Route::post('groups/save/{group?}', 'UserController@saveGroup')->name('user.saveGroup');
         Route::get('groups/delete/{group}', 'UserController@deleteGroup')->name('user.deleteGroup');
+        //users listRoles
+        Route::get('roles', 'UserController@listRoles')->name('user.listRoles');
     });
 });

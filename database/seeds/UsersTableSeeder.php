@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
+use App\Group;
 
 class UsersTableSeeder extends Seeder
 {
@@ -13,7 +14,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $data = [
-            'group_id' => 1,
+            'group_id' => Group::ROOT_ID,
             'name' => User::ROOT_NAME,
             'email' => 'admin@renome.ua',
         ];

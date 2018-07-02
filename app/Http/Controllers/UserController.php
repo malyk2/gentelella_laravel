@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Group;
 use App\User;
 use App\Permission;
+use App\Role;
 use App\Http\Requests\User\SaveGroup as SaveGroupRequest;
 use App\Http\Requests\User\SaveUser as SaveUserRequest;
 
@@ -99,6 +100,14 @@ class UserController extends Controller
         abort_if( ! $user->canDelete(), 404);
         $user->delete();
         return redirect()->route('user.listUsers')->pnotify('Користувача видалено.', '','success');
+    }
+
+    public function listRoles()
+    {
+        $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
+        $roles = Role::with('group.ancestors')->whereIn('group_id', $userGroupsIds)->get();
+        dd($roles);
+        return view('user.listRoles', compact('users'));
     }
 
 }
