@@ -65,7 +65,7 @@ class UserController extends Controller
     {
         $this->authorize('manage', User::class);
         $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
-        $users = User::with('group.ancestors')->whereIn('group_id', $userGroupsIds)->where('id', '<>', auth()->id())->get();
+        $users = User::with('group.ancestors')->whereIn('group_id', $userGroupsIds)->get();
         return view('user.listUsers', compact('users'));
     }
 

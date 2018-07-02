@@ -75,12 +75,12 @@ class User extends Authenticatable
 
     public function canEdit()
     {
-        return ! $this->isRoot();
+        return ! ($this->isRoot() || $this->id == auth()->id());
     }
 
     public function canDelete()
     {
-        return ! $this->isRoot();
+        return ! ($this->isRoot() || $this->id == auth()->id());
     }
 
     public function isRoot()

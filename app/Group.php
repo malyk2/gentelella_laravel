@@ -52,12 +52,32 @@ class Group extends Model
     /**Start Helper*/
     public function canEdit()
     {
-        return ! $this->isRoot();
+        return ! ($this->isRoot() || $this->isCurrent());
     }
 
     public function canDelete()
     {
-        return ! $this->isRoot();
+        return ! ($this->isRoot() || $this->hasUsers() || $this->descendantsHasUsers());
+    }
+
+    public function isCurrent()
+    {
+        return $this->id == auth()->user()->group_id;
+    }
+
+    public function hasUsers()
+    {
+        return $this->users->isNotEmpty();
+    }
+
+    public function descendantsHasUsers()
+    {
+        foreach($this->descendants as $item) {
+            if($item->users->isNotEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function isRoot()
