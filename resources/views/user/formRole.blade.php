@@ -6,9 +6,10 @@
     $(function(){
         $('#select-group').on('change', function(e){
             var group = $(this).val();
+            var role = $('#role-id').val();
             if(group !== '') {
                 $.ajax({
-                    url: '/users/groups/getGroupPermissions/'+group,
+                    url: '/users/roles/listPerms/'+group+'/'+role,
                     type: 'get',
                     dataType: 'html',
                     success: function (data) {
@@ -26,7 +27,7 @@
 <div class="right_col" role="main">
     <div class="">
         <div class="clearfix"></div>
-        {{ Breadcrumbs::render('user.editAddUser', ! empty($item) ? $item : null) }}
+        {{ Breadcrumbs::render('user.editAddRole', ! empty($item) ? $item : null) }}
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -52,7 +53,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Група</label>
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Група користувачів</label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <select id="select-group" class="form-control {{ $errors->has('group_id') ? 'parsley-error' : '' }}" name="group_id">
                                         <option value="">Виберіть групу</option>
@@ -70,8 +71,12 @@
                                     {!! formErrors('group_id') !!}
                                 </div>
                             </div>
-                            <div id="perms-list"></div>
-
+                            <div id="perms-list">
+                                @if( ! empty($item))
+                                    @include('user.listPermissions', ['permissions' => $item->group->permissions, 'item' => $item])
+                                @endif
+                            </div>
+                            <input type="hidden" id="role-id" value="{{ ! empty($item) ? $item->id : null }}">
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">

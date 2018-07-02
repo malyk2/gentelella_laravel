@@ -30,7 +30,7 @@ class Group extends Model
         return $this->belongsToMany(Permission::class)->withTimestamps();
     }
 
-    public function paarent()
+    public function parent()
     {
         return $this->belongsTo(Group::class);
     }

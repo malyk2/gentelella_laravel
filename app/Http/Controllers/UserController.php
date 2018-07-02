@@ -25,7 +25,7 @@ class UserController extends Controller
         $this->authorize('manage', Group::class);
         $user = auth()->user();
         $tree = $user->getTreeAllGroups();
-        $permissions = $user->group->permissions->groupBy('type');
+        $permissions = $user->group->permissions;
         return view('user.formGroup', compact('tree', 'permissions'));
     }
 
@@ -35,7 +35,7 @@ class UserController extends Controller
         $item = $group->load('permissions', 'users');
         $user = auth()->user();
         $tree = $user->getTreeAllGroups();
-        $permissions = $user->group->permissions->groupBy('type');
+        $permissions = $user->group->permissions;
         return view('user.formGroup', compact('item', 'tree', 'permissions'));
     }
 
@@ -61,13 +61,6 @@ class UserController extends Controller
         abort_if( ! $group->canDelete(), 404);
         $group->delete();
         return redirect()->route('user.listGroups')->pnotify('Групу видалено.', '','success');
-    }
-
-    public function getGroupPermissions(Group $group)
-    {
-        $group->load('permissions');
-        $permissions = $group->permissions->groupBy('type');
-        return view('user.listPermissions', compact('permissions'));
     }
 
     public function listUsers()
@@ -120,6 +113,9 @@ class UserController extends Controller
 
     public function addRole()
     {
+        // $qw = Group::find(1);
+        // dd($qw->permissions);
+        // dd('stop');
         // $this->authorize('manage', User::class);
         $groupsTree = auth()->user()->getTreeAllGroups();
         return view('user.formRole', compact('groupsTree'));
@@ -135,6 +131,21 @@ class UserController extends Controller
             $role->permissions()->sync($perms);
         // }
         return redirect()->route('user.listRoles')->pnotify('Дані збережено', 'Успіх','success');
+    }
+
+    public function editRole(Role $role)
+    {
+        $item = $role->load('group.permissions');
+        $groupsTree = auth()->user()->getTreeAllGroups();
+        return view('user.formRole', compact('item', 'groupsTree'));
+    }
+
+    public function listPerms(Group $group, Role $role)
+    {
+        $group->load('permissions');
+        $permissions = $group->permissions;
+        $item = $role->load('permissions');
+        return view('user.listPermissions', compact('permissions', 'item'));
     }
 
 

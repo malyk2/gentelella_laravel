@@ -3,7 +3,7 @@
 <div class="right_col" role="main">
     <div class="">
         <div class="clearfix"></div>
-        {{-- {{ Breadcrumbs::render('user.listUsers') }} --}}
+        {{ Breadcrumbs::render('user.listRoles') }}
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -57,7 +57,7 @@
                                                     <ul role="menu" class="dropdown-menu">
                                                         @if($role->canEdit())
                                                             <li>
-                                                                <a href="{{ route('user.editUser', [$role->id]) }}">Редагувати</a>
+                                                                <a href="{{ route('user.editRole', [$role->id]) }}">Редагувати</a>
                                                             </li>
                                                         @endif
                                                         @if($role->canDelete())
