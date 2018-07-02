@@ -12,7 +12,8 @@ class Role extends Model
     const ROOT_NAME = 'root';
 
     protected $fillable = [
-        'name'
+        'name',
+        'group_id',
     ];
     /**Start relations */
     public function permissions()
@@ -30,5 +31,15 @@ class Role extends Model
     /**End mutators */
 
     /**Start Helper*/
+    public function canEdit()
+    {
+        return true;
+    }
+
+    public function canDelete()
+    {
+        return true;
+    }
+
     /**End Helper*/
 }

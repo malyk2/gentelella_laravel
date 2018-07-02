@@ -1,22 +1,39 @@
 @extends('layouts.app')
 @include('modules.iCheck')
 @section('content')
-
+@push('js')
+<script>
+    $(function(){
+        $('#select-group').on('change', function(e){
+            var group = $(this).val();
+            if(group !== '') {
+                $.ajax({
+                    url: '/users/groups/getGroupPermissions/'+group,
+                    type: 'get',
+                    dataType: 'html',
+                    success: function (data) {
+                        $('#perms-list').html(data);
+                        app.initICheck();
+                    },
+                });
+            } else {
+                $('#perms-list').html('');
+            }
+        });
+    });
+</script>
+@endpush
 <div class="right_col" role="main">
     <div class="">
-        {{ Breadcrumbs::render('user.editAddGroup', ! empty($item) ? $item : null) }}
         <div class="clearfix"></div>
-
+        {{ Breadcrumbs::render('user.editAddUser', ! empty($item) ? $item : null) }}
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>{{ empty($item) ? 'Створення' : 'Редагування' }} групи користувачів</h2>
+                        <h2>{{ empty($item) ? 'Створення' : 'Редагування' }} ролі користувачів</h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                             </li>
                             <li><a class="close-link"><i class="fa fa-close"></i></a>
                             </li>
@@ -24,41 +41,37 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <form class="form-horizontal form-label-left" action="{{ route('user.saveGroup', [ ! empty($item) ? $item->id : null ]) }}" method="post">
+                        <form class="form-horizontal form-label-left" action="{{ route('user.saveRole',[ ! empty($item) ? $item->id : null]) }}" method="post" autocomplete="nope">
                             @csrf
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Назва <span class="required">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="first-name" name="name" class="form-control col-md-7 col-xs-12 {{ $errors->has('name') ? 'parsley-error' : '' }}" value="{{ ! empty($item) ? $item->name : '' }}">
+                                <input type="text" id="first-name" name="name" class="form-control col-md-7 col-xs-12 {{ $errors->has('name') ? 'parsley-error' : '' }}" value="{{ old('name', ( ! empty($item) ? $item->name : '')) }}">
                                     {!! formErrors('name') !!}
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Батьківська група</label>
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Група</label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control {{ $errors->has('parent_id') ? 'parsley-error' : '' }}" {{ ! empty($item) ? 'disabled' : '' }} name="parent_id">
-                                        @if( ! empty($item) && $item->parent->isRoot())
-                                            <option value="{{ $item->parent->id }}">{{ $item->parent->name }}</option>
-                                        @else
+                                    <select id="select-group" class="form-control {{ $errors->has('group_id') ? 'parsley-error' : '' }}" name="group_id">
+                                        <option value="">Виберіть групу</option>
                                         @php
                                             $item = ! empty($item) ? $item : null;
                                             $traverse = function ($groups, $prefix = '') use (&$traverse, $item) {
                                                 foreach ($groups as $group) {
-                                                    echo '<option value="'.$group->id.'"'.( ! empty($item) && $item->parent_id == $group->id ? 'selected' : '' ).'>'.$prefix.' '.$group->name.'</option>';
+                                                    echo '<option value="'.$group->id.'"'.(old('group_id') == $group->id ? 'selected' : ( ! empty($item) && $item->group_id == $group->id ? 'selected' : '')).'>'.$prefix.' '.$group->name.'</option>';
                                                     $traverse($group->children, $prefix.'-');
                                                 }
                                             };
-                                            $traverse($tree);
+                                            $traverse($groupsTree);
                                         @endphp
-                                        @endif
                                     </select>
-                                    {!! formErrors('parent_id') !!}
+                                    {!! formErrors('group_id') !!}
                                 </div>
                             </div>
-                            @can('groups', \App\Permission::class)
-                                @include('user.listPermissions', compact('item', 'permissions'))
-                            @endcan
+                            <div id="perms-list"></div>
+
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">

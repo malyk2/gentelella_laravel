@@ -9,6 +9,7 @@ use App\Permission;
 use App\Role;
 use App\Http\Requests\User\SaveGroup as SaveGroupRequest;
 use App\Http\Requests\User\SaveUser as SaveUserRequest;
+use App\Http\Requests\User\SaveRole as SaveRoleRequest;
 
 class UserController extends Controller
 {
@@ -48,7 +49,7 @@ class UserController extends Controller
         } else {
             $group->update(['name' => $data['name']]);
         }
-        if (auth()->user()->can('manage', Permission::class)) {
+        if (auth()->user()->can('groups', Permission::class)) {
             $perms = array_key_exists('perms', $data) ? array_keys($data['perms']) : [];
             $group->permissions()->sync($perms);
         }
@@ -60,6 +61,13 @@ class UserController extends Controller
         abort_if( ! $group->canDelete(), 404);
         $group->delete();
         return redirect()->route('user.listGroups')->pnotify('Групу видалено.', '','success');
+    }
+
+    public function getGroupPermissions(Group $group)
+    {
+        $group->load('permissions');
+        $permissions = $group->permissions->groupBy('type');
+        return view('user.listPermissions', compact('permissions'));
     }
 
     public function listUsers()
@@ -104,10 +112,30 @@ class UserController extends Controller
 
     public function listRoles()
     {
+        $this->authorize('manage', User::class);
         $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
         $roles = Role::with('group.ancestors')->whereIn('group_id', $userGroupsIds)->get();
-        dd($roles);
-        return view('user.listRoles', compact('users'));
+        return view('user.listRoles', compact('roles'));
     }
+
+    public function addRole()
+    {
+        // $this->authorize('manage', User::class);
+        $groupsTree = auth()->user()->getTreeAllGroups();
+        return view('user.formRole', compact('groupsTree'));
+    }
+
+    public function saveRole(SaveRoleRequest $request, Role $role)
+    {
+        $data = $request->validated();
+        $role->fill($data);
+        $role->save();
+        // if (auth()->user()->can('groups', Permission::class)) {
+            $perms = array_key_exists('perms', $data) ? array_keys($data['perms']) : [];
+            $role->permissions()->sync($perms);
+        // }
+        return redirect()->route('user.listRoles')->pnotify('Дані збережено', 'Успіх','success');
+    }
+
 
 }

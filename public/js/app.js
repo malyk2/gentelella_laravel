@@ -157,6 +157,12 @@ class App {
             $BOX_PANEL.remove();
         });
     };
+    initICheck() {
+        $('input.flat').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        });
+    };
 }
 let app = new App();
 app.initSidebar();

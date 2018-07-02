@@ -4,4 +4,9 @@
 
 @push('js')
     <script src="{{ asset('vendors/iCheck/icheck.min.js') }}"></script>
+    <script>
+        $(function(){
+            app.initICheck();
+        });
+    </script>
 @endpush
