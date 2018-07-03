@@ -33,12 +33,23 @@ class Role extends Model
     /**Start Helper*/
     public function canEdit()
     {
-        return true;
+        // return true;
+        return ! ($this->isRoot() || $this->isCurrent());
     }
 
     public function canDelete()
     {
         return true;
+    }
+
+    public function isCurrent()
+    {
+        return true;
+    }
+
+    public function isRoot()
+    {
+        return $this->name == self::ROOT_NAME;
     }
 
     /**End Helper*/

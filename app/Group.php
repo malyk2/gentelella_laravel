@@ -34,6 +34,11 @@ class Group extends Model
     {
         return $this->belongsTo(Group::class);
     }
+
+    public function roles()
+    {
+        return $this->hasMany(Role::class);
+    }
     /**End relations */
 
     /**Start Mutators*/
@@ -58,7 +63,7 @@ class Group extends Model
 
     public function canDelete()
     {
-        return ! ($this->isRoot() || $this->hasUsers() || $this->descendantsHasUsers());
+        return ! ($this->isRoot() || $this->hasUsers() || $this->descendantsHasUsers() || $this->hasRoles());
     }
 
     public function isCurrent()
@@ -71,6 +76,11 @@ class Group extends Model
         return $this->users->isNotEmpty();
     }
 
+    public function hasRoles()
+    {
+        return $this->roles->isNotEmpty();
+    }
+
     public function descendantsHasUsers()
     {
         foreach($this->descendants as $item) {
@@ -79,6 +89,11 @@ class Group extends Model
             }
         }
         return false;
+    }
+
+    public function belogsUser(User $user)
+    {
+        return $user->getAllGroups()->contains('id', $this->id);
     }
 
     public function isRoot()

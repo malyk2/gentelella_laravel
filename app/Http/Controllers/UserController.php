@@ -31,7 +31,7 @@ class UserController extends Controller
 
     public function editGroup(Group $group)
     {
-        abort_if( ! $group->canEdit(), 404);
+        $this->authorize('edit', $group);
         $item = $group->load('permissions', 'users');
         $user = auth()->user();
         $tree = $user->getTreeAllGroups();
@@ -58,7 +58,7 @@ class UserController extends Controller
 
     public function deleteGroup(Group $group)
     {
-        abort_if( ! $group->canDelete(), 404);
+        $this->authorize('delete', $group);
         $group->delete();
         return redirect()->route('user.listGroups')->pnotify('Групу видалено.', '','success');
     }

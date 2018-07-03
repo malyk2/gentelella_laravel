@@ -27,6 +27,6 @@ class RolePolicy
 
     public function edit(User $user, Role $role)
     {
-        return ($this->manage($user) && true);
+        return $this->manage($user) && $role->canEdit() && $role->belogsUser($user);
     }
 }
