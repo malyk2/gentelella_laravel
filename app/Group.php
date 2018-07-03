@@ -76,11 +76,6 @@ class Group extends Model
         return $this->users->isNotEmpty();
     }
 
-    public function hasRoles()
-    {
-        return $this->roles->isNotEmpty();
-    }
-
     public function descendantsHasUsers()
     {
         foreach($this->descendants as $item) {
@@ -89,6 +84,11 @@ class Group extends Model
             }
         }
         return false;
+    }
+
+    public function hasRoles()
+    {
+        return $this->roles->isNotEmpty();
     }
 
     public function belogsUser(User $user)

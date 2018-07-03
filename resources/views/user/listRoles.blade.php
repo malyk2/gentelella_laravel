@@ -62,7 +62,7 @@
                                                         @endif
                                                         @if($role->canDelete())
                                                             <li>
-                                                                <a href="{{ route('user.deleteUser', [$role->id]) }}">Видалити</a>
+                                                                <a href="{{ route('user.deleteRole', [$role->id]) }}">Видалити</a>
                                                             </li>
                                                         @endif
                                                     </ul>

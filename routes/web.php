@@ -46,12 +46,12 @@ Route::middleware('auth')->group(function() {
             Route::get('add', 'UserController@addRole')->name('user.addRole');
             Route::get('edit/{role}', 'UserController@editRole')->name('user.editRole');
             Route::post('save/{role?}', 'UserController@saveRole')->name('user.saveRole');
-
+            Route::get('delete/{role}', 'UserController@deleteRole')->name('user.deleteRole');
         });
         //ajax routes
         Route::prefix('ajax')->group(function(){
-            Route::get('getPerms/{group}/{role?}', 'UserController@getPerms');
-            Route::get('getRoles/{group}/{user?}', 'UserController@getRoles');
+            Route::post('getPerms/{group?}/{role?}', 'UserController@getPerms')->name('ajax.getPerms');
+            Route::post('getRoles/{group}/{user?}', 'UserController@getRoles');
         });
 
     });

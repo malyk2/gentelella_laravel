@@ -126,10 +126,8 @@ class UserController extends Controller
         $data = $request->validated();
         $role->fill($data);
         $role->save();
-        // if (auth()->user()->can('groups', Permission::class)) {
-            $perms = array_key_exists('perms', $data) ? array_keys($data['perms']) : [];
-            $role->permissions()->sync($perms);
-        // }
+        $perms = array_key_exists('perms', $data) ? array_keys($data['perms']) : [];
+        $role->permissions()->sync($perms);
         return redirect()->route('user.listRoles')->pnotify('Успіх', 'Дані збережено', 'success');
     }
 
@@ -139,6 +137,13 @@ class UserController extends Controller
         $item = $role->load('group.permissions');
         $groupsTree = auth()->user()->getTreeAllGroups();
         return view('user.formRole', compact('item', 'groupsTree'));
+    }
+
+    public function deleteRole(Role $role)
+    {
+        $this->authorize('delete', $role);
+        $role->delete();
+        return redirect()->route('user.listRoles')->pnotify('Успіх', 'Роль видалено.','success');
     }
 
     public function getPerms(Group $group, Role $role)
@@ -154,6 +159,11 @@ class UserController extends Controller
         $group->load('roles');
         $roles = $group->roles;
         return view('user.selectRoles', compact('roles'));
+    }
+
+    public function test()
+    {
+        dd('test');
     }
 
 

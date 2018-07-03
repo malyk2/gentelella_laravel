@@ -25,6 +25,11 @@ class Role extends Model
     {
         return $this->belongsTo(Group::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
     /**End relations */
 
     /**Start Mutators*/
@@ -33,18 +38,27 @@ class Role extends Model
     /**Start Helper*/
     public function canEdit()
     {
-        // return true;
-        return ! ($this->isRoot() || $this->isCurrent());
+        return ! ($this->isRoot());
     }
 
     public function canDelete()
     {
-        return true;
+        return ! ($this->isRoot() || $this->isCurrent() || $this->hasUsers());
+    }
+
+    public function hasUsers()
+    {
+        return $this->users->isNotEmpty();
     }
 
     public function isCurrent()
     {
-        return true;
+        return auth()->user()->roles->contains('id', $this->id);
+    }
+
+    public function belogsUser(User $user)
+    {
+        return $user->getAllGroups()->contains('id', $this->group_id);
     }
 
     public function isRoot()

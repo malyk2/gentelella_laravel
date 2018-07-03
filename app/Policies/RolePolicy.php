@@ -29,4 +29,9 @@ class RolePolicy
     {
         return $this->manage($user) && $role->canEdit() && $role->belogsUser($user);
     }
+
+    public function delete(User $user, Role $role)
+    {
+        return $this->manage($user) && $role->canDelete() && $role->belogsUser($user);
+    }
 }

@@ -167,4 +167,4 @@ class App {
 let app = new App();
 app.initSidebar();
 app.initPanelToolbox();
-// app.alaxSetup();
+app.alaxSetup();

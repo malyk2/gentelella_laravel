@@ -8,9 +8,13 @@
             var group = $(this).val();
             var role = $('#role-id').val();
             if(group !== '') {
+                var url = '/users/ajax/getPerms/'+group;
+                if (role !== '') {
+                    url += '/'+role;
+                }
                 $.ajax({
-                    url: '/users/ajax/getPerms/'+group+'/'+role,
-                    type: 'get',
+                    type: 'post',
+                    url: url,
                     dataType: 'html',
                     success: function (data) {
                         $('#perms-list').html(data);
@@ -61,7 +65,7 @@
                                             $item = ! empty($item) ? $item : null;
                                             $traverse = function ($groups, $prefix = '') use (&$traverse, $item) {
                                                 foreach ($groups as $group) {
-                                                    echo '<option value="'.$group->id.'"'.(old('group_id') == $group->id ? 'selected' : ( ! empty($item) && $item->group_id == $group->id ? 'selected' : '')).'>'.$prefix.' '.$group->name.'</option>';
+                                                    echo '<option value="'.$group->id.'"'.( ! empty($item) && $item->group_id == $group->id ? 'selected' : '').'>'.$prefix.' '.$group->name.'</option>';
                                                     $traverse($group->children, $prefix.'-');
                                                 }
                                             };
