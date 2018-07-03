@@ -37,6 +37,7 @@
                                     <th>Логін</th>
                                     <th>E-mail</th>
                                     <th>Група</th>
+                                    <th>Ролі</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -51,6 +52,11 @@
                                         </td>
                                         <td>
                                             {{ $user->group->full_name }}
+                                        </td>
+                                        <td>
+                                            @foreach($user->roles as $role)
+                                                {{ $role->name }} {{ ! $loop->last ? ', ' : '' }}
+                                            @endforeach
                                         </td>
                                         <td class="text-center">
                                             @if($user->canEdit() || $user->canDelete())

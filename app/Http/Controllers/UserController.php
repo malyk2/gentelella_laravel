@@ -67,7 +67,7 @@ class UserController extends Controller
     {
         $this->authorize('manage', User::class);
         $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
-        $users = User::with('group.ancestors')->whereIn('group_id', $userGroupsIds)->get();
+        $users = User::with('group.ancestors', 'roles')->whereIn('group_id', $userGroupsIds)->get();
         return view('user.listUsers', compact('users'));
     }
 
@@ -82,7 +82,7 @@ class UserController extends Controller
     {
         abort_if( ! $user->canEdit(), 404);
         $this->authorize('manage', User::class);
-        $item = $user->load('group');
+        $item = $user->load('roles', 'group.roles');
         $groupsTree = auth()->user()->getTreeAllGroups();
         return view('user.formUser', compact('item', 'groupsTree'));
     }
@@ -93,6 +93,8 @@ class UserController extends Controller
         $data = $request->validated();
         $user->fill($data);
         $user->save();
+        $roles = array_key_exists('roles', $data) ? $data['roles'] : [];
+        $user->roles()->sync($roles);
         return redirect()->route('user.listUsers')->pnotify('Дані збережено', '','success');
     }
 
@@ -139,12 +141,19 @@ class UserController extends Controller
         return view('user.formRole', compact('item', 'groupsTree'));
     }
 
-    public function listPerms(Group $group, Role $role)
+    public function getPerms(Group $group, Role $role)
     {
         $group->load('permissions');
         $permissions = $group->permissions;
         $item = $role->load('permissions');
-        return view('user.listPermissions', compact('permissions', 'item'));
+        return view('user.checkboxesPermissions', compact('permissions', 'item'));
+    }
+
+    public function getRoles(Group $group)
+    {
+        $group->load('roles');
+        $roles = $group->roles;
+        return view('user.selectRoles', compact('roles'));
     }
 
 

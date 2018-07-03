@@ -33,16 +33,26 @@ Route::middleware('auth')->group(function() {
         Route::post('save/{user?}', 'UserController@saveUser')->name('user.saveUser');
         Route::get('delete/{user}', 'UserController@deleteUser')->name('user.deleteUser');
         //users groups routes
-        Route::get('groups', 'UserController@listGroups')->name('user.listGroups');
-        Route::get('groups/add', 'UserController@addGroup')->name('user.addGroup');
-        Route::get('groups/edit/{group}', 'UserController@editGroup')->name('user.editGroup');
-        Route::post('groups/save/{group?}', 'UserController@saveGroup')->name('user.saveGroup');
-        Route::get('groups/delete/{group}', 'UserController@deleteGroup')->name('user.deleteGroup');
-        //users listRoles
-        Route::get('roles', 'UserController@listRoles')->name('user.listRoles');
-        Route::get('roles/add', 'UserController@addRole')->name('user.addRole');
-        Route::get('roles/edit/{role}', 'UserController@editRole')->name('user.editRole');
-        Route::post('roles/save/{role?}', 'UserController@saveRole')->name('user.saveRole');
-        Route::get('roles/listPerms/{group}/{role?}', 'UserController@listPerms');
+        Route::prefix('groups')->group(function(){
+            Route::get('/', 'UserController@listGroups')->name('user.listGroups');
+            Route::get('add', 'UserController@addGroup')->name('user.addGroup');
+            Route::get('edit/{group}', 'UserController@editGroup')->name('user.editGroup');
+            Route::post('save/{group?}', 'UserController@saveGroup')->name('user.saveGroup');
+            Route::get('delete/{group}', 'UserController@deleteGroup')->name('user.deleteGroup');
+        });
+        //users roles routes
+        Route::prefix('roles')->group(function(){
+            Route::get('/', 'UserController@listRoles')->name('user.listRoles');
+            Route::get('add', 'UserController@addRole')->name('user.addRole');
+            Route::get('edit/{role}', 'UserController@editRole')->name('user.editRole');
+            Route::post('save/{role?}', 'UserController@saveRole')->name('user.saveRole');
+
+        });
+        //ajax routes
+        Route::prefix('ajax')->group(function(){
+            Route::get('getPerms/{group}/{role?}', 'UserController@getPerms');
+            Route::get('getRoles/{group}/{user?}', 'UserController@getRoles');
+        });
+
     });
 });

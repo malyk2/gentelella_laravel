@@ -37,6 +37,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Group::class);
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
     /**End relations */
 
     /**Start Mutators*/

@@ -9,7 +9,7 @@
             var role = $('#role-id').val();
             if(group !== '') {
                 $.ajax({
-                    url: '/users/roles/listPerms/'+group+'/'+role,
+                    url: '/users/ajax/getPerms/'+group+'/'+role,
                     type: 'get',
                     dataType: 'html',
                     success: function (data) {
@@ -73,7 +73,7 @@
                             </div>
                             <div id="perms-list">
                                 @if( ! empty($item))
-                                    @include('user.listPermissions', ['permissions' => $item->group->permissions, 'item' => $item])
+                                    @include('user.checkboxesPermissions', ['permissions' => $item->group->permissions, 'item' => $item])
                                 @endif
                             </div>
                             <input type="hidden" id="role-id" value="{{ ! empty($item) ? $item->id : null }}">

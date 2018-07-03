@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                             @can('groups', \App\Permission::class)
-                                @include('user.listPermissions', compact('item', 'permissions'))
+                                @include('user.checkboxesPermissions', compact('item', 'permissions'))
                             @endcan
                             <div class="ln_solid"></div>
                             <div class="form-group">
