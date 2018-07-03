@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function() {
         });
         //ajax routes
         Route::prefix('ajax')->group(function(){
-            Route::post('getPerms/{group?}/{role?}', 'UserController@getPerms')->name('ajax.getPerms');
+            Route::post('getPerms/{group?}/{role?}', 'UserController@getPerms');
             Route::post('getRoles/{group}/{user?}', 'UserController@getRoles');
         });
 

@@ -92,5 +92,10 @@ class User extends Authenticatable
     {
         return $this->name == self::ROOT_NAME;
     }
+
+    public function belogsUser(User $user)
+    {
+        return $user->getAllGroups()->contains('id', $this->group_id);
+    }
     /**End Helper*/
 }

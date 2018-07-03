@@ -80,8 +80,7 @@ class UserController extends Controller
 
     public function editUser(User $user)
     {
-        abort_if( ! $user->canEdit(), 404);
-        $this->authorize('manage', User::class);
+        $this->authorize('edit', $user);
         $item = $user->load('roles', 'group.roles');
         $groupsTree = auth()->user()->getTreeAllGroups();
         return view('user.formUser', compact('item', 'groupsTree'));
@@ -100,7 +99,7 @@ class UserController extends Controller
 
     public function deleteUser(User $user)
     {
-        abort_if( ! $user->canDelete(), 404);
+        $this->authorize('delete', $user);
         $user->delete();
         return redirect()->route('user.listUsers')->pnotify('Користувача видалено.', '','success');
     }
