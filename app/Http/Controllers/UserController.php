@@ -65,6 +65,7 @@ class UserController extends Controller
 
     public function listUsers()
     {
+
         $this->authorize('manage', User::class);
         $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
         $users = User::with('group.ancestors', 'roles')->whereIn('group_id', $userGroupsIds)->get();
@@ -162,8 +163,11 @@ class UserController extends Controller
 
     public function test()
     {
-        dd('test');
+        \Illuminate\Support\Facades\DB::enableQueryLog();
+        $user = User::find(4);
+        dump($user->hasPerm('users.manage'));
+        dump($user->hasPerm('users.manage'));
+        \Log::info(\Illuminate\Support\Facades\DB::getQueryLog());
+        dd('stop');
     }
-
-
 }

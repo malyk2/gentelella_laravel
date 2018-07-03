@@ -40,7 +40,7 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Role::class)->withTimestamps();
     }
     /**End relations */
 
@@ -52,6 +52,22 @@ class User extends Authenticatable
     /**End mutators */
 
     /**Start Helper*/
+    // public function hasPerm($perms, $strict = false)
+    // {
+    //     if( is_array($perms)) {
+    //         foreach($perms as $perm) {
+    //             $hasPerm = $this->hasPerm($perm);
+    //             if ($hasPerm && ! $strict) {
+    //                 return true;
+    //             } elseif ( ! $hasPerm && $strict) {
+    //                 return false;
+    //             }
+    //         }
+    //     } else {
+    //         return $this->group->permissions->contains('name', $perms);
+    //     }
+    // }
+
     public function hasPerm($perms, $strict = false)
     {
         if( is_array($perms)) {
@@ -64,9 +80,16 @@ class User extends Authenticatable
                 }
             }
         } else {
-            return $this->group->permissions->contains('name', $perms);
+            $allPerms = $this->getAllUserPerms();
+            return $allPerms->contains('name', $perms);
         }
     }
+
+    public function getAllUserPerms()
+    {
+        return $this->roles()->with('permissions')->get()->pluck('permissions')->flatten()->unique('id');
+    }
+
 
     public function getAllGroups()
     {

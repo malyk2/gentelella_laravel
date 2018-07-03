@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function() {
     Route::get('profile', 'HomeController@profileForm')->name('profile.form');
     Route::post('profile', 'HomeController@profileSave')->name('profile.save');
     Route::post('profile/changePassword', 'HomeController@changePassword')->name('profile.changePassword');
+    //users routes
     Route::prefix('users')->group(function(){
         //users routes
         Route::get('', 'UserController@listUsers')->name('user.listUsers');
@@ -53,6 +54,6 @@ Route::middleware('auth')->group(function() {
             Route::post('getPerms/{group?}/{role?}', 'UserController@getPerms');
             Route::post('getRoles/{group}/{user?}', 'UserController@getRoles');
         });
-
     });
+    Route::get('test', 'UserController@test');
 });
