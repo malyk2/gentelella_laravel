@@ -35,3 +35,17 @@ Breadcrumbs::for('user.editAddGroup', function ($trail, $item) {
         $trail->push('Створення групи', route('user.addGroup'));
     }
 });
+
+Breadcrumbs::for('user.listRoles', function ($trail) {
+    $trail->parent('home');
+    $trail->push('Ролі', route('user.listRoles'));
+});
+
+Breadcrumbs::for('user.editAddRole', function ($trail, $item) {
+    $trail->parent('user.listRoles');
+    if ( ! empty($item)) {
+        $trail->push($item->name, route('user.editRole', $item));
+    } else {
+        $trail->push('Створення ролі', route('user.addRole'));
+    }
+});

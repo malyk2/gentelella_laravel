@@ -6,15 +6,17 @@ use Illuminate\Http\Request;
 use App\Group;
 use App\User;
 use App\Permission;
+use App\Role;
 use App\Http\Requests\User\SaveGroup as SaveGroupRequest;
 use App\Http\Requests\User\SaveUser as SaveUserRequest;
+use App\Http\Requests\User\SaveRole as SaveRoleRequest;
 
 class UserController extends Controller
 {
     public function listGroups()
     {
         $this->authorize('manage', Group::class);
-        $tree = auth()->user()->getTreeAllGroups();
+        $tree = auth()->user()->getTreeAllGroups(['users', 'roles', 'descendants.users']);
         return view('user.listGroups', compact('tree'));
     }
 
@@ -23,17 +25,17 @@ class UserController extends Controller
         $this->authorize('manage', Group::class);
         $user = auth()->user();
         $tree = $user->getTreeAllGroups();
-        $permissions = $user->group->permissions->groupBy('type');
+        $permissions = $user->group->permissions;
         return view('user.formGroup', compact('tree', 'permissions'));
     }
 
     public function editGroup(Group $group)
     {
-        abort_if( ! $group->canEdit(), 404);
+        $this->authorize('edit', $group);
         $item = $group->load('permissions', 'users');
         $user = auth()->user();
         $tree = $user->getTreeAllGroups();
-        $permissions = $user->group->permissions->groupBy('type');
+        $permissions = $user->group->permissions;
         return view('user.formGroup', compact('item', 'tree', 'permissions'));
     }
 
@@ -47,7 +49,7 @@ class UserController extends Controller
         } else {
             $group->update(['name' => $data['name']]);
         }
-        if (auth()->user()->can('manage', Permission::class)) {
+        if (auth()->user()->can('groups', Permission::class)) {
             $perms = array_key_exists('perms', $data) ? array_keys($data['perms']) : [];
             $group->permissions()->sync($perms);
         }
@@ -56,7 +58,7 @@ class UserController extends Controller
 
     public function deleteGroup(Group $group)
     {
-        abort_if( ! $group->canDelete(), 404);
+        $this->authorize('delete', $group);
         $group->delete();
         return redirect()->route('user.listGroups')->pnotify('Групу видалено.', '','success');
     }
@@ -65,7 +67,7 @@ class UserController extends Controller
     {
         $this->authorize('manage', User::class);
         $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
-        $users = User::with('group.ancestors')->whereIn('group_id', $userGroupsIds)->where('id', '<>', auth()->id())->get();
+        $users = User::with('group.ancestors', 'roles')->whereIn('group_id', $userGroupsIds)->get();
         return view('user.listUsers', compact('users'));
     }
 
@@ -78,9 +80,8 @@ class UserController extends Controller
 
     public function editUser(User $user)
     {
-        abort_if( ! $user->canEdit(), 404);
-        $this->authorize('manage', User::class);
-        $item = $user->load('group');
+        $this->authorize('edit', $user);
+        $item = $user->load('roles', 'group.roles');
         $groupsTree = auth()->user()->getTreeAllGroups();
         return view('user.formUser', compact('item', 'groupsTree'));
     }
@@ -91,14 +92,71 @@ class UserController extends Controller
         $data = $request->validated();
         $user->fill($data);
         $user->save();
+        $roles = array_key_exists('roles', $data) ? $data['roles'] : [];
+        $user->roles()->sync($roles);
         return redirect()->route('user.listUsers')->pnotify('Дані збережено', '','success');
     }
 
     public function deleteUser(User $user)
     {
-        abort_if( ! $user->canDelete(), 404);
+        $this->authorize('delete', $user);
         $user->delete();
         return redirect()->route('user.listUsers')->pnotify('Користувача видалено.', '','success');
     }
 
+    public function listRoles()
+    {
+        $this->authorize('manage', Role::class);
+        $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
+        $roles = Role::with('group.ancestors','users')->whereIn('group_id', $userGroupsIds)->get();
+        return view('user.listRoles', compact('roles'));
+    }
+
+    public function addRole()
+    {
+        $this->authorize('manage', Role::class);
+        $groupsTree = auth()->user()->getTreeAllGroups();
+        return view('user.formRole', compact('groupsTree'));
+    }
+
+    public function saveRole(SaveRoleRequest $request, Role $role)
+    {
+        $this->authorize('manage', Role::class);
+        $data = $request->validated();
+        $role->fill($data);
+        $role->save();
+        $perms = array_key_exists('perms', $data) ? array_keys($data['perms']) : [];
+        $role->permissions()->sync($perms);
+        return redirect()->route('user.listRoles')->pnotify('Успіх', 'Дані збережено', 'success');
+    }
+
+    public function editRole(Role $role)
+    {
+        $this->authorize('edit', $role);
+        $item = $role->load('group.permissions');
+        $groupsTree = auth()->user()->getTreeAllGroups();
+        return view('user.formRole', compact('item', 'groupsTree'));
+    }
+
+    public function deleteRole(Role $role)
+    {
+        $this->authorize('delete', $role);
+        $role->delete();
+        return redirect()->route('user.listRoles')->pnotify('Успіх', 'Роль видалено.','success');
+    }
+
+    public function getPerms(Group $group, Role $role)
+    {
+        $group->load('permissions');
+        $permissions = $group->permissions;
+        $item = $role->load('permissions');
+        return view('user.checkboxesPermissions', compact('permissions', 'item'));
+    }
+
+    public function getRoles(Group $group)
+    {
+        $group->load('roles');
+        $roles = $group->roles;
+        return view('user.selectRoles', compact('roles'));
+    }
 }

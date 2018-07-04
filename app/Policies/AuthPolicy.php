@@ -21,6 +21,6 @@ class AuthPolicy
 
     public function login(User $user)
     {
-        return $user->hasPerm('login');
+        return $user->hasPerm('auth.login');
     }
 }

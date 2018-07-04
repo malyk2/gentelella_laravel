@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class User extends Authenticatable
 {
@@ -37,6 +38,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Group::class);
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
     /**End relations */
 
     /**Start Mutators*/
@@ -47,6 +53,13 @@ class User extends Authenticatable
     /**End mutators */
 
     /**Start Helper*/
+    public function getAllUserPerms()
+    {
+        return Cache::tags('user_roles_perms')->remember('user_id_'.$this->id, 10, function () {
+            return $this->roles()->with('permissions')->get()->pluck('permissions')->flatten()->unique('id');
+        });
+    }
+
     public function hasPerm($perms, $strict = false)
     {
         if( is_array($perms)) {
@@ -59,7 +72,8 @@ class User extends Authenticatable
                 }
             }
         } else {
-            return $this->group->permissions->contains('name', $perms);
+            $allPerms = $this->getAllUserPerms();
+            return $allPerms->contains('name', $perms);
         }
     }
 
@@ -68,24 +82,31 @@ class User extends Authenticatable
         return Group::descendantsAndSelf($this->group_id);
     }
 
-    public function getTreeAllGroups()
+    public function getTreeAllGroups($with = null)
     {
-        return Group::descendantsAndSelf($this->group_id)->toTree();
+        $query = Group::query();
+        ! empty($with) ? $query->with($with) : false;
+        return $query->descendantsAndSelf($this->group_id)->toTree();
     }
 
     public function canEdit()
     {
-        return ! $this->isRoot();
+        return ! ($this->isRoot() || $this->id == auth()->id());
     }
 
     public function canDelete()
     {
-        return ! $this->isRoot();
+        return ! ($this->isRoot() || $this->id == auth()->id());
     }
 
     public function isRoot()
     {
         return $this->name == self::ROOT_NAME;
+    }
+
+    public function belogsUser(User $user)
+    {
+        return $user->getAllGroups()->contains('id', $this->group_id);
     }
     /**End Helper*/
 }

@@ -19,8 +19,8 @@ class PermissionPolicy
         //
     }
 
-    public function manage(User $user)
+    public function groups(User $user)
     {
-        return $user->hasPerm('permissions.manage');
+        return $user->hasPerm('permissions.groups');
     }
 }

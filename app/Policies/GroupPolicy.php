@@ -2,8 +2,9 @@
 
 namespace App\Policies;
 
-use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\User;
+use App\Group;
 
 class GroupPolicy
 {
@@ -22,5 +23,15 @@ class GroupPolicy
     public function manage(User $user)
     {
         return $user->hasPerm('groups.manage');
+    }
+
+    public function edit(User $user, Group $group)
+    {
+        return $this->manage($user) && $group->canEdit() && $group->belogsUser($user);
+    }
+
+    public function delete(User $user, Group $group)
+    {
+        return $this->manage($user) && $group->canDelete() && $group->belogsUser($user);
     }
 }

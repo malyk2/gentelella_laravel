@@ -1,5 +1,26 @@
 @extends('layouts.app')
 @section('content')
+@push('js')
+<script>
+    $(function(){
+        $('#select-group').on('change', function(e){
+            var group = $(this).val();
+            if(group !== '') {
+                $.ajax({
+                    url: '/users/ajax/getRoles/'+group,
+                    type: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        $('#roles-list').html(data);
+                    },
+                });
+            } else {
+                $('#roles-list').html('');
+            }
+        });
+    });
+</script>
+@endpush
 <div class="right_col" role="main">
     <div class="">
         <div class="clearfix"></div>
@@ -47,13 +68,13 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Група</label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control {{ $errors->has('group_id') ? 'parsley-error' : '' }}" name="group_id">
+                                    <select id="select-group" class="form-control {{ $errors->has('group_id') ? 'parsley-error' : '' }}" name="group_id">
                                         <option value="">Виберіть групу</option>
                                         @php
                                             $item = ! empty($item) ? $item : null;
                                             $traverse = function ($groups, $prefix = '') use (&$traverse, $item) {
                                                 foreach ($groups as $group) {
-                                                    echo '<option value="'.$group->id.'"'.(old('group_id') == $group->id ? 'selected' : ( ! empty($item) && $item->group_id == $group->id ? 'selected' : '')).'>'.$prefix.' '.$group->name.'</option>';
+                                                    echo '<option value="'.$group->id.'"'.( ! empty($item) && $item->group_id == $group->id ? 'selected' : '').'>'.$prefix.' '.$group->name.'</option>';
                                                     $traverse($group->children, $prefix.'-');
                                                 }
                                             };
@@ -62,6 +83,11 @@
                                     </select>
                                     {!! formErrors('group_id') !!}
                                 </div>
+                            </div>
+                            <div id="roles-list">
+                                @if( ! empty($item))
+                                    @include('user.selectRoles', ['item' => $item, 'roles' => $item->group->roles])
+                                @endif
                             </div>
                             <div class="ln_solid"></div>
                             <div class="form-group">

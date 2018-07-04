@@ -3,22 +3,22 @@
 <div class="right_col" role="main">
     <div class="">
         <div class="clearfix"></div>
-        {{ Breadcrumbs::render('user.listUsers') }}
+        {{ Breadcrumbs::render('user.listRoles') }}
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Список користувачів</h2>
+                        <h2>Список ролей користувачів</h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Settings 1</a>
+                                    {{-- <li><a href="#">Settings 1</a>
                                     </li>
                                     <li><a href="#">Settings 2</a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </li>
                             <li><a class="close-link"><i class="fa fa-close"></i></a>
@@ -26,53 +26,43 @@
                         </ul>
                         <div class="clearfix"></div>
                     </div>
-                    <a href="{{ route('user.addUser') }}" class="btn btn-round btn-primary" aria-label="Left Align">
+                    <a href="{{ route('user.addRole') }}" class="btn btn-round btn-primary" aria-label="Left Align">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                     </a>
                     <div class="x_content">
-                        @if(count($users))
+                        @if(count($roles))
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Логін</th>
-                                    <th>E-mail</th>
+                                    <th>Назва</th>
                                     <th>Група</th>
-                                    <th>Ролі</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($users as $user)
+                                @foreach($roles as $role)
                                     <tr>
                                         <td>
-                                            {{ $user->name }}
+                                            {{ $role->name }}
                                         </td>
                                         <td>
-                                            {{ $user->email }}
-                                        </td>
-                                        <td>
-                                            {{ $user->group->full_name }}
-                                        </td>
-                                        <td>
-                                            @foreach($user->roles as $role)
-                                                {{ $role->name }} {{ ! $loop->last ? ', ' : '' }}
-                                            @endforeach
+                                            {{ $role->group->full_name }}
                                         </td>
                                         <td class="text-center">
-                                            @if($user->canEdit() || $user->canDelete())
+                                            @if($role->canEdit() || $role->canDelete())
                                                 <div class="btn-group">
                                                     <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-sm" type="button" aria-expanded="false">
                                                         <span class="caret"></span>
                                                     </button>
                                                     <ul role="menu" class="dropdown-menu">
-                                                        @if($user->canEdit())
+                                                        @if($role->canEdit())
                                                             <li>
-                                                                <a href="{{ route('user.editUser', [$user->id]) }}">Редагувати</a>
+                                                                <a href="{{ route('user.editRole', [$role->id]) }}">Редагувати</a>
                                                             </li>
                                                         @endif
-                                                        @if($user->canDelete())
+                                                        @if($role->canDelete())
                                                             <li>
-                                                                <a href="{{ route('user.deleteUser', [$user->id]) }}">Видалити</a>
+                                                                <a href="{{ route('user.deleteRole', [$role->id]) }}">Видалити</a>
                                                             </li>
                                                         @endif
                                                     </ul>

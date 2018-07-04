@@ -10,6 +10,7 @@ class Group extends Model
 {
     use SoftDeletes, NodeTrait;
 
+    const ROOT_ID = 1;
     const ROOT_NAME = 'root';
 
     protected $fillable = [
@@ -29,9 +30,14 @@ class Group extends Model
         return $this->belongsToMany(Permission::class)->withTimestamps();
     }
 
-    public function paarent()
+    public function parent()
     {
         return $this->belongsTo(Group::class);
+    }
+
+    public function roles()
+    {
+        return $this->hasMany(Role::class);
     }
     /**End relations */
 
@@ -52,12 +58,42 @@ class Group extends Model
     /**Start Helper*/
     public function canEdit()
     {
-        return ! $this->isRoot();
+        return ! ($this->isRoot() || $this->isCurrent());
     }
 
     public function canDelete()
     {
-        return ! $this->isRoot();
+        return ! ($this->isRoot() || $this->hasUsers() || $this->descendantsHasUsers() || $this->hasRoles());
+    }
+
+    public function isCurrent()
+    {
+        return $this->id == auth()->user()->group_id;
+    }
+
+    public function hasUsers()
+    {
+        return $this->users->isNotEmpty();
+    }
+
+    public function descendantsHasUsers()
+    {
+        foreach($this->descendants as $item) {
+            if($item->users->isNotEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasRoles()
+    {
+        return $this->roles->isNotEmpty();
+    }
+
+    public function belogsUser(User $user)
+    {
+        return $user->getAllGroups()->contains('id', $this->id);
     }
 
     public function isRoot()
