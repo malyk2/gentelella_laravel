@@ -10,7 +10,6 @@ use App\Role;
 use App\Http\Requests\User\SaveGroup as SaveGroupRequest;
 use App\Http\Requests\User\SaveUser as SaveUserRequest;
 use App\Http\Requests\User\SaveRole as SaveRoleRequest;
-use Illuminate\Support\Facades\Config;
 
 class UserController extends Controller
 {
