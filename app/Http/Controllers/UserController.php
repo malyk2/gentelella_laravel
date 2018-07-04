@@ -160,15 +160,4 @@ class UserController extends Controller
         $roles = $group->roles;
         return view('user.selectRoles', compact('roles'));
     }
-
-    public function test()
-    {
-        // dd(Config::get('cache.ttl'));
-        \Illuminate\Support\Facades\DB::enableQueryLog();
-        $user = User::find(4);
-        dump($user->hasPerm('users.manage'));
-        dump($user->hasPerm('users.manage'));
-        \Log::info(\Illuminate\Support\Facades\DB::getQueryLog());
-        dd('stop');
-    }
 }

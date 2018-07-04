@@ -11,9 +11,6 @@
 |
 */
 
-// Route::get('/', 'TestController@index');
-
-
 //public routes
 Route::get('login', 'AuthController@form')->name('auth.form');
 Route::post('login', 'AuthController@login')->name('login');
@@ -55,5 +52,4 @@ Route::middleware('auth')->group(function() {
             Route::post('getRoles/{group}/{user?}', 'UserController@getRoles');
         });
     });
-    Route::get('test', 'UserController@test');
 });
