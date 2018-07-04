@@ -10,13 +10,14 @@ use App\Role;
 use App\Http\Requests\User\SaveGroup as SaveGroupRequest;
 use App\Http\Requests\User\SaveUser as SaveUserRequest;
 use App\Http\Requests\User\SaveRole as SaveRoleRequest;
+use Illuminate\Support\Facades\Config;
 
 class UserController extends Controller
 {
     public function listGroups()
     {
         $this->authorize('manage', Group::class);
-        $tree = auth()->user()->getTreeAllGroups();
+        $tree = auth()->user()->getTreeAllGroups(['users', 'roles', 'descendants.users']);
         return view('user.listGroups', compact('tree'));
     }
 
@@ -65,7 +66,6 @@ class UserController extends Controller
 
     public function listUsers()
     {
-
         $this->authorize('manage', User::class);
         $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
         $users = User::with('group.ancestors', 'roles')->whereIn('group_id', $userGroupsIds)->get();
@@ -109,7 +109,7 @@ class UserController extends Controller
     {
         $this->authorize('manage', Role::class);
         $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
-        $roles = Role::with('group.ancestors')->whereIn('group_id', $userGroupsIds)->get();
+        $roles = Role::with('group.ancestors','users')->whereIn('group_id', $userGroupsIds)->get();
         return view('user.listRoles', compact('roles'));
     }
 
@@ -163,6 +163,7 @@ class UserController extends Controller
 
     public function test()
     {
+        // dd(Config::get('cache.ttl'));
         \Illuminate\Support\Facades\DB::enableQueryLog();
         $user = User::find(4);
         dump($user->hasPerm('users.manage'));

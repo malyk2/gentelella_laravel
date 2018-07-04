@@ -49,5 +49,8 @@
     <script src="{{ asset('js/app.js') }}"></script>
     @stack('js')
     {{-- <script src="{{ asset('js/theme-custom.js') }}"></script> --}}
+    {{-- @php
+      \Log::info(\Illuminate\Support\Facades\DB::getQueryLog());
+    @endphp --}}
   </body>
 </html>

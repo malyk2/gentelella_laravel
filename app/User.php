@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class User extends Authenticatable
 {
@@ -52,21 +53,12 @@ class User extends Authenticatable
     /**End mutators */
 
     /**Start Helper*/
-    // public function hasPerm($perms, $strict = false)
-    // {
-    //     if( is_array($perms)) {
-    //         foreach($perms as $perm) {
-    //             $hasPerm = $this->hasPerm($perm);
-    //             if ($hasPerm && ! $strict) {
-    //                 return true;
-    //             } elseif ( ! $hasPerm && $strict) {
-    //                 return false;
-    //             }
-    //         }
-    //     } else {
-    //         return $this->group->permissions->contains('name', $perms);
-    //     }
-    // }
+    public function getAllUserPerms()
+    {
+        return Cache::tags('user_roles_perms')->remember('user_id_'.$this->id, 10, function () {
+            return $this->roles()->with('permissions')->get()->pluck('permissions')->flatten()->unique('id');
+        });
+    }
 
     public function hasPerm($perms, $strict = false)
     {
@@ -85,20 +77,16 @@ class User extends Authenticatable
         }
     }
 
-    public function getAllUserPerms()
-    {
-        return $this->roles()->with('permissions')->get()->pluck('permissions')->flatten()->unique('id');
-    }
-
-
     public function getAllGroups()
     {
         return Group::descendantsAndSelf($this->group_id);
     }
 
-    public function getTreeAllGroups()
+    public function getTreeAllGroups($with = null)
     {
-        return Group::descendantsAndSelf($this->group_id)->toTree();
+        $query = Group::query();
+        ! empty($with) ? $query->with($with) : false;
+        return $query->descendantsAndSelf($this->group_id)->toTree();
     }
 
     public function canEdit()
