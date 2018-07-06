@@ -16,6 +16,7 @@ class Group extends Model
     protected $fillable = [
         'name',
         'active',
+        'lifetime',
     ];
 
     protected $dates = ['deleted_at'];

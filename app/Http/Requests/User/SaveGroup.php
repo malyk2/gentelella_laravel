@@ -28,6 +28,7 @@ class SaveGroup extends FormRequest
             'parent_id' => ! $this->group ? 'required' : '',
             'perms' => 'array',
             'active' => 'boolean',
+            'lifetime' => 'required',
         ];
     }
 

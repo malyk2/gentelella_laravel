@@ -26,7 +26,8 @@ class UserController extends Controller
         $user = auth()->user();
         $tree = $user->getTreeAllGroups();
         $permissions = $user->group->permissions;
-        return view('user.formGroup', compact('tree', 'permissions'));
+        $lifetimes = config('smart.users.groups.lifetimes');
+        return view('user.formGroup', compact('tree', 'permissions', 'lifetimes'));
     }
 
     public function editGroup(Group $group)
@@ -36,14 +37,15 @@ class UserController extends Controller
         $user = auth()->user();
         $tree = $user->getTreeAllGroups();
         $permissions = $user->group->permissions;
-        return view('user.formGroup', compact('item', 'tree', 'permissions'));
+        $lifetimes = config('smart.users.groups.lifetimes');
+        return view('user.formGroup', compact('item', 'tree', 'permissions', 'lifetimes'));
     }
 
     public function saveGroup(SaveGroupRequest $request, Group $group)
     {
         $this->authorize('manage', Group::class);
         $data = $request->validated();
-        $attributes = array_only($data, ['name', 'active']);
+        $attributes = array_only($data, ['name', 'active', 'lifetime']);
         if ( ! $group->exists ) {
             $parent = Group::find($data['parent_id']);
             $group = $parent->children()->create($attributes);

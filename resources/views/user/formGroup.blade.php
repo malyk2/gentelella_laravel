@@ -59,6 +59,16 @@
                             @can('groups', \App\Permission::class)
                                 @include('user.checkboxesPermissions', compact('item', 'permissions'))
                             @endcan
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Час сесії</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select name="lifetime" id="" class="form-control">
+                                        @foreach($lifetimes as $value => $title)
+                                            <option value="{{ $value }}" {{ ! empty($item) && $item->lifetime == $value ? 'selected="seleted"' : '' }}>{{ $title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                             <input type="hidden" name="active" value="0">
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Вхід</label>
