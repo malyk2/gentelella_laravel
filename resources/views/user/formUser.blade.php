@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@include('modules.iCheck')
 @section('content')
 @push('js')
 <script>
@@ -88,6 +89,17 @@
                                 @if( ! empty($item))
                                     @include('user.selectRoles', ['item' => $item, 'roles' => $item->group->roles])
                                 @endif
+                            </div>
+                            <input type="hidden" name="active" value="0">
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Вхід</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" class="flat" name="active" value="1" {{ (! empty($item) && $item->active) || empty($item) ? 'checked="checked"' : '' }}>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="ln_solid"></div>
                             <div class="form-group">

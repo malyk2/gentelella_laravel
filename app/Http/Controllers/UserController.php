@@ -43,11 +43,12 @@ class UserController extends Controller
     {
         $this->authorize('manage', Group::class);
         $data = $request->validated();
+        $attributes = array_only($data, ['name', 'active']);
         if ( ! $group->exists ) {
             $parent = Group::find($data['parent_id']);
-            $group = $parent->children()->create(['name' => $data['name']]);
+            $group = $parent->children()->create($attributes);
         } else {
-            $group->update(['name' => $data['name']]);
+            $group->update($attributes);
         }
         if (auth()->user()->can('groups', Permission::class)) {
             $perms = array_key_exists('perms', $data) ? array_keys($data['perms']) : [];

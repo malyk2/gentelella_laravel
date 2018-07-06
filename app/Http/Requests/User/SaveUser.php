@@ -28,6 +28,7 @@ class SaveUser extends FormRequest
             'email' => 'required|email',
             'group_id' => 'required',
             'roles' => 'array',
+            'active' => 'boolean',
         ];
         $rules['password'] = ! $this->user ? 'required' : '';
         return $rules;

@@ -14,7 +14,8 @@ class Group extends Model
     const ROOT_NAME = 'root';
 
     protected $fillable = [
-        'name'
+        'name',
+        'active',
     ];
 
     protected $dates = ['deleted_at'];
