@@ -177,10 +177,13 @@ class App {
         var sign = last_time >= 0 ? '' : '-';
         var _last_time = last_time >= 0 ? last_time : -last_time;
         var _s_m = Math.floor(_last_time / 60).toString();
-        var _s_m = _s_m.length === 1 ? '0' + _s_m : _s_m;
+        var _s_M = _s_m.length === 1 ? '0' + _s_m : _s_m;
         var _s_s = (_last_time % 60).toString();
-        var _s_s = _s_s.length === 1 ? '0' + _s_s : _s_s;
-        selector.html(sign + _s_m + ':' + _s_s);
+        var _s_S = _s_s.length === 1 ? '0' + _s_s : _s_s;
+        if (sign === '-') {
+            window.location.reload();
+        }
+        selector.html(sign + _s_M + ':' + _s_S);
     };
 
     initLifetime() {
