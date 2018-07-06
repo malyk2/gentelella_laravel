@@ -163,8 +163,32 @@ class App {
             radioClass: 'iradio_flat-green'
         });
     };
+
+    updateTime(selector) {
+        var last_time = --window.Laravel.session_lifetime;
+        var sign = last_time >= 0 ? '' : '-';
+        var _last_time = last_time >= 0 ? last_time : -last_time;
+        var _s_m = Math.floor(_last_time / 60).toString();
+        var _s_m = _s_m.length === 1 ? '0' + _s_m : _s_m;
+        var _s_s = (_last_time % 60).toString();
+        var _s_s = _s_s.length === 1 ? '0' + _s_s : _s_s;
+        selector.html(sign + _s_m + ':' + _s_s);
+    };
+
+    initLifetime() {
+        $(function () {
+            var label = $('#user-time');
+            if (label) {
+                app.updateTime(label);
+                window.setInterval(function(){
+                    app.updateTime(label);
+                }, 1000);
+            }
+        });
+    }
 }
 let app = new App();
 app.initSidebar();
 app.initPanelToolbox();
 app.alaxSetup();
+app.initLifetime();

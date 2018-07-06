@@ -28,7 +28,6 @@
         @include('left-menu')
 
         @include('top-menu')
-
         @yield('content')
 
         @include('footer')
@@ -47,6 +46,14 @@
 
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script>
+      window.Laravel =
+      @php
+        echo json_encode([
+          'session_lifetime' => config('session.lifetime')*60,
+      ]);
+      @endphp
+    </script>
     @stack('js')
     {{-- <script src="{{ asset('js/theme-custom.js') }}"></script> --}}
     {{-- @php

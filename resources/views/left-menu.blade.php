@@ -141,20 +141,18 @@
       <!-- /sidebar menu -->
 
       <!-- /menu footer buttons -->
-      {{-- <div class="sidebar-footer hidden-small">
-        <a data-toggle="tooltip" data-placement="top" title="Settings">
+      <div class="sidebar-footer hidden-small">
+        <a href="{{ route('home') }}" data-toggle="tooltip" data-placement="top" title="Домівка">
+          <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+        </a>
+        <a href="{{ route('profile.form') }}" data-toggle="tooltip" data-placement="top" title="Settings">
           <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
         </a>
-        <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-          <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-        </a>
-        <a data-toggle="tooltip" data-placement="top" title="Lock">
-          <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-        </a>
-        <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+        <a id="user-time"></a>
+        <a href="{{ route('logout') }}" data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
           <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
         </a>
-      </div> --}}
+      </div>
       <!-- /menu footer buttons -->
     </div>
   </div>
