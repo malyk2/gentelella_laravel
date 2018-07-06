@@ -6,6 +6,14 @@ class App {
             }
         });
     };
+    initNbProgress() {
+        $(document).ready(function () {
+            NProgress.start();
+        });
+        $(window).load(function () {
+            NProgress.done();
+        });
+    };
     initSidebar() {
         (function ($, sr) {
             // debouncing function from John Hann
@@ -188,6 +196,7 @@ class App {
     }
 }
 let app = new App();
+app.initNbProgress();
 app.initSidebar();
 app.initPanelToolbox();
 app.alaxSetup();

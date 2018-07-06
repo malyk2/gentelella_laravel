@@ -12,7 +12,11 @@
                     type: 'post',
                     dataType: 'html',
                     success: function (data) {
+                        NProgress.done();
                         $('#roles-list').html(data);
+                    },
+                    beforeSend: function() {
+                        NProgress.start();
                     },
                 });
             } else {

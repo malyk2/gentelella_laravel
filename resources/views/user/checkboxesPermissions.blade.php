@@ -1,8 +1,8 @@
-@if(count($permissions))
-    <div class="form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Доступи
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
+<div class="form-group">
+    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Доступи
+    </label>
+    <div class="col-md-6 col-sm-6 col-xs-12">
+        @if(count($permissions))
             @foreach($permissions->groupBy('type') as $type => $perms)
                 <label class="control-label col-md-3" for="first-name">{{ $type }}
                 </label>
@@ -19,6 +19,8 @@
                 @endforeach
                 </ul>
             @endforeach
-        </div>
+        @else
+            <label class="control-label col-md-6 col-sm-6 col-xs-12">Доступи у вибраній групі відсутні</label>
+        @endif
     </div>
-    @endif
+</div>
