@@ -70,7 +70,7 @@ class UserController extends Controller
     {
         $this->authorize('manage', User::class);
         $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
-        $users = User::with('group.ancestors', 'roles')->whereIn('group_id', $userGroupsIds)->get();
+        $users = User::with('group.ancestors', 'roles')->whereIn('group_id', $userGroupsIds)->paginate(User::PAGINATE_PER_PAGE);
         return view('user.listUsers', compact('users'));
     }
 
@@ -111,7 +111,7 @@ class UserController extends Controller
     {
         $this->authorize('manage', Role::class);
         $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
-        $roles = Role::with('group.ancestors','users')->whereIn('group_id', $userGroupsIds)->get();
+        $roles = Role::with('group.ancestors','users')->whereIn('group_id', $userGroupsIds)->paginate(Role::PAGINATE_PER_PAGE);
         return view('user.listRoles', compact('roles'));
     }
 

@@ -97,6 +97,11 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12 text-center paginator">
+                                {{ $users->links() }}
+                            </div>
+                        </div>
                         @endif
                     </div>
                 </div>

@@ -12,6 +12,9 @@ class User extends Authenticatable
     use Notifiable, SoftDeletes;
 
     const ROOT_NAME = 'admin';
+
+    const PAGINATE_PER_PAGE = 10;
+
     /**
      * The attributes that are mass assignable.
      *

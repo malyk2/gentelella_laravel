@@ -11,6 +11,8 @@ class Role extends Model
 
     const ROOT_NAME = 'root';
 
+    const PAGINATE_PER_PAGE = 10;
+
     protected $fillable = [
         'name',
         'group_id',
