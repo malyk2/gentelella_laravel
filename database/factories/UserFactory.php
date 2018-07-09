@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
+use App\Group;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,10 +15,15 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\User::class, function (Faker $faker) {
+    $group = Group::inRandomOrder()->first();
     return [
         'name' => $faker->name,
+        'group_id' => $group->id,
+        'active' => 1,
+        'logout' => 0,
+        'name' => $faker->firstName(),
         'email' => $faker->unique()->safeEmail,
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
+        'password' => 'secret',
         'remember_token' => str_random(10),
     ];
 });
