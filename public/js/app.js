@@ -6,6 +6,14 @@ class App {
             }
         });
     };
+    initNbProgress() {
+        $(document).ready(function () {
+            NProgress.start();
+        });
+        $(window).load(function () {
+            NProgress.done();
+        });
+    };
     initSidebar() {
         (function ($, sr) {
             // debouncing function from John Hann
@@ -163,8 +171,36 @@ class App {
             radioClass: 'iradio_flat-green'
         });
     };
+
+    updateTime(selector) {
+        var last_time = --window.Laravel.session_lifetime;
+        var sign = last_time >= 0 ? '' : '-';
+        var _last_time = last_time >= 0 ? last_time : -last_time;
+        var _s_m = Math.floor(_last_time / 60).toString();
+        var _s_M = _s_m.length === 1 ? '0' + _s_m : _s_m;
+        var _s_s = (_last_time % 60).toString();
+        var _s_S = _s_s.length === 1 ? '0' + _s_s : _s_s;
+        if (sign === '-') {
+            window.location.reload();
+        }
+        selector.html(sign + _s_M + ':' + _s_S);
+    };
+
+    initLifetime() {
+        $(function () {
+            var label = $('#user-time');
+            if (label) {
+                app.updateTime(label);
+                window.setInterval(function(){
+                    app.updateTime(label);
+                }, 1000);
+            }
+        });
+    }
 }
 let app = new App();
+app.initNbProgress();
 app.initSidebar();
 app.initPanelToolbox();
 app.alaxSetup();
+app.initLifetime();

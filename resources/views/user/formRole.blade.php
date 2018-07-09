@@ -19,6 +19,10 @@
                     success: function (data) {
                         $('#perms-list').html(data);
                         app.initICheck();
+                        NProgress.done();
+                    },
+                    beforeSend: function() {
+                        NProgress.start();
                     },
                 });
             } else {

@@ -16,6 +16,8 @@ class CreateGroupsTable extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->boolean('active')->default(1);
+            $table->integer('lifetime')->default(60);
             $table->nestedSet();
             $table->softDeletes();
             $table->timestamps();

@@ -14,7 +14,9 @@ class Group extends Model
     const ROOT_NAME = 'root';
 
     protected $fillable = [
-        'name'
+        'name',
+        'active',
+        'lifetime',
     ];
 
     protected $dates = ['deleted_at'];
@@ -99,6 +101,11 @@ class Group extends Model
     public function isRoot()
     {
         return $this->name == self::ROOT_NAME;
+    }
+
+    public function canActivated()
+    {
+        return ! $this->ancestors->contains('active', 0);
     }
     /**End Helper*/
 

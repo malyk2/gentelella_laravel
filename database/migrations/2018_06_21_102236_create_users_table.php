@@ -17,6 +17,8 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->integer('group_id');
             $table->foreign('group_id')->references('id')->on('groups');
+            $table->boolean('active')->default(1);
+            $table->boolean('logout')->default(0);
             $table->string('name')->unique();
             $table->string('email');
             $table->string('password');

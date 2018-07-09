@@ -1161,11 +1161,11 @@ legend {
 .profile_details .profile_left {
     background: white
 }
-.pagination.pagination-split li {
+.paginator .pagination li {
     display: inline-block;
     margin-right: 3px
 }
-.pagination.pagination-split li a {
+.paginator .pagination li a {
     border-radius: 4px;
     color: #768399;
     -moz-border-radius: 4px;

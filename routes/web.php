@@ -16,7 +16,7 @@ Route::get('login', 'AuthController@form')->name('auth.form');
 Route::post('login', 'AuthController@login')->name('login');
 
 //private routes
-Route::middleware('auth')->group(function() {
+Route::middleware('auth','lifetime')->group(function() {
     Route::get('', 'HomeController@index')->name('home');
     Route::get('logout', 'AuthController@logout')->name('logout');
     Route::get('profile', 'HomeController@profileForm')->name('profile.form');

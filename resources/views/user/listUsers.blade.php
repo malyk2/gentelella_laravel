@@ -46,12 +46,26 @@
                                     <tr>
                                         <td>
                                             {{ $user->name }}
+                                            <span class="label pull-right {{ $user->active ? 'label-success' : 'label-danger' }}">
+                                                <i class="fa {{ $user->active ? 'fa-unlock' : 'fa-lock' }} "></i>
+                                            </span>
                                         </td>
                                         <td>
                                             {{ $user->email }}
                                         </td>
                                         <td>
-                                            {{ $user->group->full_name }}
+                                            @if($user->group->canEdit())
+                                                <a href="{{ route('user.editGroup', [$user->group->id]) }}">
+                                                    <i class="fa fa-link">
+                                                        {{ $user->group->full_name }}
+                                                    </i>
+                                                </a>
+                                            @else
+                                                {{ $user->group->full_name }}
+                                            @endif
+                                            <span class="label pull-right {{ $user->group->active ? 'label-success' : 'label-danger' }}">
+                                                <i class="fa {{ $user->group->active ? 'fa-unlock' : 'fa-lock' }} "></i>
+                                            </span>
                                         </td>
                                         <td>
                                             @foreach($user->roles as $role)
@@ -83,6 +97,11 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12 text-center paginator">
+                                {{ $users->links() }}
+                            </div>
+                        </div>
                         @endif
                     </div>
                 </div>

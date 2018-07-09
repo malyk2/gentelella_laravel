@@ -13,9 +13,6 @@ class PermissionException extends Exception
 
     public function render()
     {
-        // if (auth()->check()) {
-        //     return redirect()->back()->pnotify('Доступ заборонено', '','error');
-        // }
         return redirect()->route('home')->pnotify('Доступ заборонено', '','error');
     }
 }

@@ -12,6 +12,9 @@ class User extends Authenticatable
     use Notifiable, SoftDeletes;
 
     const ROOT_NAME = 'admin';
+
+    const PAGINATE_PER_PAGE = 10;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +25,8 @@ class User extends Authenticatable
         'email',
         'password',
         'group_id',
+        'active',
+        'logout',
     ];
 
     /**
@@ -79,7 +84,9 @@ class User extends Authenticatable
 
     public function getAllGroups()
     {
-        return Group::descendantsAndSelf($this->group_id);
+        return Cache::tags('all_user_groups')->remember('user_id_'.$this->id, 10, function () {
+            return Group::descendantsAndSelf($this->group_id);
+        });
     }
 
     public function getTreeAllGroups($with = null)

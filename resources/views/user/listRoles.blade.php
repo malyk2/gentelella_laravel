@@ -46,7 +46,15 @@
                                             {{ $role->name }}
                                         </td>
                                         <td>
-                                            {{ $role->group->full_name }}
+                                            @if($role->group->canEdit())
+                                                <a href="{{ route('user.editGroup', [$role->group->id]) }}">
+                                                    <i class="fa fa-link">
+                                                        {{ $role->group->full_name }}
+                                                    </i>
+                                                </a>
+                                            @else
+                                                {{ $role->group->full_name }}
+                                            @endif
                                         </td>
                                         <td class="text-center">
                                             @if($role->canEdit() || $role->canDelete())
@@ -73,6 +81,11 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12 text-center paginator">
+                                {{ $roles->links() }}
+                            </div>
+                        </div>
                         @endif
                     </div>
                 </div>

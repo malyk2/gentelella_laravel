@@ -26,28 +26,31 @@ class UserController extends Controller
         $user = auth()->user();
         $tree = $user->getTreeAllGroups();
         $permissions = $user->group->permissions;
-        return view('user.formGroup', compact('tree', 'permissions'));
+        $lifetimes = config('smart.users.groups.lifetimes');
+        return view('user.formGroup', compact('tree', 'permissions', 'lifetimes'));
     }
 
     public function editGroup(Group $group)
     {
         $this->authorize('edit', $group);
-        $item = $group->load('permissions', 'users');
+        $item = $group->load('permissions', 'users', 'ancestors');
         $user = auth()->user();
         $tree = $user->getTreeAllGroups();
         $permissions = $user->group->permissions;
-        return view('user.formGroup', compact('item', 'tree', 'permissions'));
+        $lifetimes = config('smart.users.groups.lifetimes');
+        return view('user.formGroup', compact('item', 'tree', 'permissions', 'lifetimes'));
     }
 
     public function saveGroup(SaveGroupRequest $request, Group $group)
     {
         $this->authorize('manage', Group::class);
         $data = $request->validated();
+        $attributes = array_only($data, ['name', 'active', 'lifetime']);
         if ( ! $group->exists ) {
             $parent = Group::find($data['parent_id']);
-            $group = $parent->children()->create(['name' => $data['name']]);
+            $group = $parent->children()->create($attributes);
         } else {
-            $group->update(['name' => $data['name']]);
+            $group->update($attributes);
         }
         if (auth()->user()->can('groups', Permission::class)) {
             $perms = array_key_exists('perms', $data) ? array_keys($data['perms']) : [];
@@ -67,7 +70,7 @@ class UserController extends Controller
     {
         $this->authorize('manage', User::class);
         $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
-        $users = User::with('group.ancestors', 'roles')->whereIn('group_id', $userGroupsIds)->get();
+        $users = User::with('group.ancestors', 'roles')->whereIn('group_id', $userGroupsIds)->paginate(User::PAGINATE_PER_PAGE);
         return view('user.listUsers', compact('users'));
     }
 
@@ -108,7 +111,7 @@ class UserController extends Controller
     {
         $this->authorize('manage', Role::class);
         $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
-        $roles = Role::with('group.ancestors','users')->whereIn('group_id', $userGroupsIds)->get();
+        $roles = Role::with('group.ancestors','users')->whereIn('group_id', $userGroupsIds)->paginate(Role::PAGINATE_PER_PAGE);
         return view('user.listRoles', compact('roles'));
     }
 
