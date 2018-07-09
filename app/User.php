@@ -81,7 +81,9 @@ class User extends Authenticatable
 
     public function getAllGroups()
     {
-        return Group::descendantsAndSelf($this->group_id);
+        return Cache::tags('all_user_groups')->remember('user_id_'.$this->id, 10, function () {
+            return Group::descendantsAndSelf($this->group_id);
+        });
     }
 
     public function getTreeAllGroups($with = null)
