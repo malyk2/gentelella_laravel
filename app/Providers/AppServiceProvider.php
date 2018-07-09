@@ -14,7 +14,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        //observers for Eloquent events
+        \App\User::observe(\App\Observers\UserObserver::class);
+        \App\Group::observe(\App\Observers\GroupObserver::class);
     }
 
     /**

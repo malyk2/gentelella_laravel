@@ -75,7 +75,7 @@
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" class="flat" name="active" value="1" {{ (! empty($item) && $item->active) || empty($item) ? 'checked="checked"' : '' }}>
+                                        <input type="checkbox" class="flat" name="active" value="1" {{ (! empty($item) && $item->active) || empty($item) ? 'checked="checked"' : '' }} {{ ! empty($item) && ! $item->active && ! $item->canActivated() ? 'disabled="disabled"' : '' }}>
                                         </label>
                                     </div>
                                 </div>

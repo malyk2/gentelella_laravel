@@ -102,6 +102,11 @@ class Group extends Model
     {
         return $this->name == self::ROOT_NAME;
     }
+
+    public function canActivated()
+    {
+        return ! $this->ancestors->contains('active', 0);
+    }
     /**End Helper*/
 
 }

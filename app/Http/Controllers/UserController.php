@@ -33,7 +33,7 @@ class UserController extends Controller
     public function editGroup(Group $group)
     {
         $this->authorize('edit', $group);
-        $item = $group->load('permissions', 'users');
+        $item = $group->load('permissions', 'users', 'ancestors');
         $user = auth()->user();
         $tree = $user->getTreeAllGroups();
         $permissions = $user->group->permissions;

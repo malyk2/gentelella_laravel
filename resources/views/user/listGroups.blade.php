@@ -75,6 +75,9 @@
                                             echo '<tr>';
                                             echo '<td>';
                                                 echo $prefix.' '.$group->name;
+                                                echo '<span class="label pull-right '.($group->active ? 'label-success' : 'label-danger').'">';
+                                                    echo '<i class="fa '.($group->active ? 'fa-unlock' : 'fa-lock' ).'"></i>';
+                                                echo '<span>';
                                             echo '</td>';
                                             echo '<td class="text-center">';
                                                 if($group->canEdit() || $group->canDelete()){
