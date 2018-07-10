@@ -26,9 +26,23 @@
                         </ul>
                         <div class="clearfix"></div>
                     </div>
-                    <a href="{{ route('user.addUser') }}" class="btn btn-round btn-primary" aria-label="Left Align">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                    </a>
+                    <div class="row">
+                        <form action="" method="get">
+                            <div class="col-md-1">
+                                <a href="{{ route('user.addUser') }}" class="btn btn-round btn-primary" aria-label="Left Align">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </a>
+                            </div>
+                            <div class="col-md-3 pull-right top_search">
+                                <div class="input-group">
+                                <input type="text" name="search" class="form-control" placeholder="Пошук" value="{{ $search or '' }}">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default">Шукати</button>
+                                </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <div class="x_content">
                         @if(count($users))
                         <table class="table table-bordered">
@@ -102,6 +116,8 @@
                                 {{ $users->links() }}
                             </div>
                         </div>
+                        @else
+                            <p>Дані відсутні</p>
                         @endif
                     </div>
                 </div>

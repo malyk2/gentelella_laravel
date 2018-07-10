@@ -66,12 +66,23 @@ class UserController extends Controller
         return redirect()->route('user.listGroups')->pnotify('Групу видалено.', '','success');
     }
 
-    public function listUsers()
+    public function listUsers(Request $request)
     {
         $this->authorize('manage', User::class);
-        $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
-        $users = User::with('group.ancestors', 'roles')->whereIn('group_id', $userGroupsIds)->paginate(User::PAGINATE_PER_PAGE);
-        return view('user.listUsers', compact('users'));
+        $search = $request->get('search');
+        $userGroups = auth()->user()->getAllGroups();
+        $userGroupsIds = $userGroups->pluck('id');
+        $query = User::query();
+        $query->with('group.ancestors', 'roles')->whereIn('group_id', $userGroupsIds);
+        if( ! empty($search)) {
+            $query->where(function($q) use($search){
+                $q->where('name', 'like', "%".$search."%");
+                $q->orWhere('email', 'like', "%".$search."%");
+            });
+        }
+        $users = $query->paginate(User::PAGINATE_PER_PAGE);
+        ! empty($search) ? $users->appends(compact('search')) : false;
+        return view('user.listUsers', compact('users', 'search'));
     }
 
     public function addUser()
