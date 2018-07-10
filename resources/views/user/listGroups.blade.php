@@ -1,4 +1,6 @@
 @extends('layouts.app')
+{{-- @include('modules.fancytree') --}}
+@include('modules.treetable')
 @section('content')
 @push('js')
 <script>
@@ -28,6 +30,9 @@
 
                 });
         });
+        $("#treetable").treetable({
+            expandable: true,
+        }).treetable("expandNode", 1);
     });
 </script>
 @endpush
@@ -61,7 +66,7 @@
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                     </a>
                     <div class="x_content">
-                        <table class="table table-bordered">
+                        <table id="treetable" class="table table-bordered treetable">
                             <thead>
                                 <tr>
                                     <th>Назва</th>
@@ -70,11 +75,11 @@
                             </thead>
                             <tbody>
                                 @php
-                                    $traverse = function ($groups, $prefix = '') use (&$traverse) {
+                                    $traverse = function ($groups) use (&$traverse) {
                                         foreach ($groups as $group) {
-                                            echo '<tr>';
+                                            echo '<tr data-tt-id="'.$group->id.'"'.(! empty($group->parent_id) ? 'data-tt-parent-id="'.$group->parent_id.'"':'').'>';
                                             echo '<td>';
-                                                echo $prefix.' '.$group->name;
+                                                echo $group->name;
                                                 echo '<span class="label pull-right '.($group->active ? 'label-success' : 'label-danger').'">';
                                                     echo '<i class="fa '.($group->active ? 'fa-unlock' : 'fa-lock' ).'"></i>';
                                                 echo '<span>';
@@ -96,7 +101,7 @@
                                                 }
                                             echo '</td>';
                                             echo '</tr>';
-                                            $traverse($group->children, $prefix.'-');
+                                            $traverse($group->children);
                                         }
                                     };
                                     $traverse($tree);
