@@ -1171,6 +1171,9 @@ legend {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px
 }
+.pagination-info {
+    margin: 20px 0;
+}
 table.tile h3,
 table.tile h4,
 table.tile span {

@@ -48,7 +48,7 @@
                             </div>
                             <div class="col-md-1">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default">Шукати</button>
+                                    <button class="btn btn-success">Шукати</button>
                                 </span>
                             </div>
                         </form>
