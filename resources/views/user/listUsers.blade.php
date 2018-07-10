@@ -33,13 +33,23 @@
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                 </a>
                             </div>
-                            <div class="col-md-3 pull-right top_search">
-                                <div class="input-group">
-                                <input type="text" name="search" class="form-control" placeholder="Пошук" value="{{ $search or '' }}">
+                            <div class="col-md-5 col-md-offset-5">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" name="filter_group">
+                                        <option value="">Виберіть групу</option>
+                                        @foreach($userGroups as $group)
+                                            <option value="{{ $group->id }}" {{ $filter_group == $group->id ? 'selected="selected"' : '' }}>{{ $group->full_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" name="search" class="form-control col-md-7 col-xs-12 " value="{{ $search or '' }}">
+                                </div>
+                            </div>
+                            <div class="col-md-1">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default">Шукати</button>
                                 </span>
-                                </div>
                             </div>
                         </form>
                     </div>

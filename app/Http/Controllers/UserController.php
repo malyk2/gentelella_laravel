@@ -70,6 +70,7 @@ class UserController extends Controller
     {
         $this->authorize('manage', User::class);
         $search = $request->get('search');
+        $filter_group = $request->get('filter_group');
         $userGroups = auth()->user()->getAllGroups();
         $userGroupsIds = $userGroups->pluck('id');
         $query = User::query();
@@ -80,9 +81,11 @@ class UserController extends Controller
                 $q->orWhere('email', 'like', "%".$search."%");
             });
         }
+        ! empty($filter_group) ? $query->where('group_id', $filter_group) : false;
         $users = $query->paginate(User::PAGINATE_PER_PAGE);
         ! empty($search) ? $users->appends(compact('search')) : false;
-        return view('user.listUsers', compact('users', 'search'));
+        ! empty($filter_group) ? $users->appends(compact('filter_group')) : false;
+        return view('user.listUsers', compact('users', 'userGroups', 'search', 'filter_group'));
     }
 
     public function addUser()
