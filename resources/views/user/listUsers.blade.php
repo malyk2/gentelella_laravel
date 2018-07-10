@@ -43,7 +43,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" name="search" class="form-control col-md-7 col-xs-12 " value="{{ $search or '' }}">
+                                    <input type="text" name="search" class="form-control col-md-7 col-xs-12" placeholder="Пошук" value="{{ $search or '' }}">
                                 </div>
                             </div>
                             <div class="col-md-1">

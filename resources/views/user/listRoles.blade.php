@@ -15,10 +15,6 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    {{-- <li><a href="#">Settings 1</a>
-                                    </li>
-                                    <li><a href="#">Settings 2</a>
-                                    </li> --}}
                                 </ul>
                             </li>
                             <li><a class="close-link"><i class="fa fa-close"></i></a>
@@ -43,7 +39,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" name="search" class="form-control col-md-7 col-xs-12 " value="{{ $search or '' }}">
+                                    <input type="text" name="search" class="form-control col-md-7 col-xs-12" placeholder="Пошук" value="{{ $search or '' }}">
                                 </div>
                             </div>
                             <div class="col-md-1">
@@ -113,6 +109,8 @@
                                 {{ $roles->links() }}
                             </div>
                         </div>
+                        @else
+                            <p>Дані відсутні</p>
                         @endif
                     </div>
                 </div>
