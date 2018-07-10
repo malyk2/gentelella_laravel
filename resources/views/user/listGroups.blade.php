@@ -32,7 +32,7 @@
         });
         $("#treetable").treetable({
             expandable: true,
-        }).treetable("expandAll");
+        }).treetable("expandNode", 1);
     });
 </script>
 @endpush
