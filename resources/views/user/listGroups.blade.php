@@ -30,44 +30,7 @@
 
                 });
         });
-        // $('#tree').fancytree({
-        //     // checkbox: true,
-        //     extensions: ["table"],
-		// 	selectMode: 1,
-		// 	activate: function(event, data){
-		// 		// var node = data.node;
-		// 		// FT.debug("activate: event=", event, ", data=", data);
-		// 		// if(!$.isEmptyObject(node.data)){
-		// 		// 	alert("custom node data: " + JSON.stringify(node.data));
-		// 		// }
-		// 	},
-		// 	lazyLoad: function(event, data){
-		// 		// we can't `return` values from an event handler, so we
-		// 		// pass the result as `data.result` attribute:
-		// 		// data.result = {url: "ajax-sub2.json"};
-		// 	},
-        // });
-//         $('#treetable').fancytree({
-//             extensions: ["table"],
-//             selectMode: 1,
-// //             fixed: {
-// // 				fixCols: 4,	  // Fix leftmost n columns
-// // //		        fixColWidths: [16, 50, 200],
-// // 				fixRows: 2  // Fix topmost n rows (true: whole <thead>)
-// // 			},
-// 			table: {
-// 				indentation: 20,	  // indent 20px per node level
-// 				nodeColumnIdx: 2,	 // render the node title into the 2nd column
-// 				checkboxColumnIdx: 0  // render the checkboxes into the 1st column
-// 			},
-//         });
-        // $('#tree').fancytree({
-        //     extensions: ["table"],
-        // });
-        // $(".treetable").treetable({
-        //     expandable: true,
-        // });
-        $(".treetable").treetable({
+        $("#treetable").treetable({
             expandable: true,
         }).treetable("expandAll");
     });
@@ -103,74 +66,7 @@
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                     </a>
                     <div class="x_content">
-                        <table class="treetable">
-                            <tr data-tt-id="1">
-                                <td>Parent1</td>
-                            </tr>
-                            <tr data-tt-id="2" data-tt-parent-id="1">
-                                <td>Child1</td>
-                            </tr>
-                            <tr data-tt-id="3">
-                                <td>Parent2</td>
-                            </tr>
-                            <tr data-tt-id="4" data-tt-parent-id="3">
-                                <td>Child1</td>
-                            </tr>
-                        </table>
-                        {{-- <div id="tree">
-                            <ul id="treeData">
-                                <li>1
-                                    <ul>
-                                        <li>11</li>
-                                        <li>12</li>
-                                        <li>13</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    2
-                                </li>
-                            </ul>
-                        </div> --}}
-                        {{-- <table id="treetable" class="table table-condensed table-hover table-striped fancytree-fade-expander">
-                            <colgroup>
-                                <col width="80px"></col>
-                                <col width="30px"></col>
-                                <col width="*"></col>
-                                <col width="100px"></col>
-                                <col width="100px"></col>
-                                <col width="100px"></col>
-                            </colgroup>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Classification</th>
-                                    <th>Folder</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                </tr>
-                            </tbody>
-                        </table> --}}
-                        {{-- </div> --}}
-                        {{-- <table class="table table-bordered">
+                        <table id="treetable" class="table table-bordered treetable">
                             <thead>
                                 <tr>
                                     <th>Назва</th>
@@ -179,11 +75,11 @@
                             </thead>
                             <tbody>
                                 @php
-                                    $traverse = function ($groups, $prefix = '') use (&$traverse) {
+                                    $traverse = function ($groups) use (&$traverse) {
                                         foreach ($groups as $group) {
-                                            echo '<tr>';
+                                            echo '<tr data-tt-id="'.$group->id.'"'.(! empty($group->parent_id) ? 'data-tt-parent-id="'.$group->parent_id.'"':'').'>';
                                             echo '<td>';
-                                                echo $prefix.' '.$group->name;
+                                                echo $group->name;
                                                 echo '<span class="label pull-right '.($group->active ? 'label-success' : 'label-danger').'">';
                                                     echo '<i class="fa '.($group->active ? 'fa-unlock' : 'fa-lock' ).'"></i>';
                                                 echo '<span>';
@@ -205,13 +101,13 @@
                                                 }
                                             echo '</td>';
                                             echo '</tr>';
-                                            $traverse($group->children, $prefix.'-');
+                                            $traverse($group->children);
                                         }
                                     };
                                     $traverse($tree);
                                 @endphp
                             </tbody>
-                        </table> --}}
+                        </table>
                     </div>
                 </div>
             </div>
