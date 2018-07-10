@@ -66,12 +66,26 @@ class UserController extends Controller
         return redirect()->route('user.listGroups')->pnotify('Групу видалено.', '','success');
     }
 
-    public function listUsers()
+    public function listUsers(Request $request)
     {
         $this->authorize('manage', User::class);
-        $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
-        $users = User::with('group.ancestors', 'roles')->whereIn('group_id', $userGroupsIds)->paginate(User::PAGINATE_PER_PAGE);
-        return view('user.listUsers', compact('users'));
+        $search = $request->get('search');
+        $filter_group = $request->get('filter_group');
+        $userGroups = auth()->user()->getAllGroups();
+        $userGroupsIds = $userGroups->pluck('id');
+        $query = User::query();
+        $query->with('group.ancestors', 'roles')->whereIn('group_id', $userGroupsIds);
+        if( ! empty($search)) {
+            $query->where(function($q) use($search){
+                $q->where('name', 'like', "%".$search."%");
+                $q->orWhere('email', 'like', "%".$search."%");
+            });
+        }
+        ! empty($filter_group) ? $query->where('group_id', $filter_group) : false;
+        $users = $query->paginate(User::PAGINATE_PER_PAGE);
+        ! empty($search) ? $users->appends(compact('search')) : false;
+        ! empty($filter_group) ? $users->appends(compact('filter_group')) : false;
+        return view('user.listUsers', compact('users', 'userGroups', 'search', 'filter_group'));
     }
 
     public function addUser()
@@ -107,12 +121,26 @@ class UserController extends Controller
         return redirect()->route('user.listUsers')->pnotify('Користувача видалено.', '','success');
     }
 
-    public function listRoles()
+    public function listRoles(Request $request)
     {
         $this->authorize('manage', Role::class);
-        $userGroupsIds = auth()->user()->getAllGroups()->pluck('id');
-        $roles = Role::with('group.ancestors','users')->whereIn('group_id', $userGroupsIds)->paginate(Role::PAGINATE_PER_PAGE);
-        return view('user.listRoles', compact('roles'));
+
+        $search = $request->get('search');
+        $filter_group = $request->get('filter_group');
+
+        $userGroups = auth()->user()->getAllGroups();
+        $userGroupsIds = $userGroups->pluck('id');
+
+        $query = Role::query();
+        $query->with('group.ancestors','users')->whereIn('group_id', $userGroupsIds);
+        ! empty($search) ? $query->where('name', 'like', "%".$search."%") : false;
+        ! empty($filter_group) ? $query->where('group_id', $filter_group) : false;
+
+        $roles = $query->paginate(Role::PAGINATE_PER_PAGE);
+        ! empty($search) ? $roles->appends(compact('search')) : false;
+        ! empty($filter_group) ? $roles->appends(compact('filter_group')) : false;
+
+        return view('user.listRoles', compact('roles', 'userGroups', 'search', 'filter_group'));
     }
 
     public function addRole()

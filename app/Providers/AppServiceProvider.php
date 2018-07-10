@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,8 @@ class AppServiceProvider extends ServiceProvider
         //observers for Eloquent events
         \App\User::observe(\App\Observers\UserObserver::class);
         \App\Group::observe(\App\Observers\GroupObserver::class);
+        //custom pagination
+        Paginator::defaultView('vendor.pagination.custom');
     }
 
     /**

@@ -26,9 +26,33 @@
                         </ul>
                         <div class="clearfix"></div>
                     </div>
-                    <a href="{{ route('user.addUser') }}" class="btn btn-round btn-primary" aria-label="Left Align">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                    </a>
+                    <div class="row">
+                        <form action="" method="get">
+                            <div class="col-md-1">
+                                <a href="{{ route('user.addUser') }}" class="btn btn-round btn-primary" aria-label="Left Align">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </a>
+                            </div>
+                            <div class="col-md-5 col-md-offset-5">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" name="filter_group">
+                                        <option value="">Виберіть групу</option>
+                                        @foreach($userGroups as $group)
+                                            <option value="{{ $group->id }}" {{ $filter_group == $group->id ? 'selected="selected"' : '' }}>{{ $group->full_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" name="search" class="form-control col-md-7 col-xs-12" placeholder="Пошук" value="{{ $search or '' }}">
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-success">Шукати</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
                     <div class="x_content">
                         @if(count($users))
                         <table class="table table-bordered">
@@ -102,6 +126,8 @@
                                 {{ $users->links() }}
                             </div>
                         </div>
+                        @else
+                            <p>Дані відсутні</p>
                         @endif
                     </div>
                 </div>
