@@ -46,13 +46,7 @@ class Group extends Model
     /**Start Mutators*/
     public function getFullNameAttribute()
     {
-        $delimiter = '-';
-        $fullName = '';
-        foreach($this->ancestors as $item) {
-            $fullName .= $item->name.$delimiter;
-        }
-        $fullName .= $this->name;
-        return $fullName;
+        return $this->ancestors->pluck('name')->concat([$this->name])->implode('-');
     }
 
     /**End mutators */
