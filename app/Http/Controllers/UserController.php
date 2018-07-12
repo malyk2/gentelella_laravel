@@ -79,6 +79,7 @@ class UserController extends Controller
             $query->where(function($q) use($search){
                 $q->where('name', 'like', "%".$search."%");
                 $q->orWhere('email', 'like', "%".$search."%");
+                $q->orWhere('pib', 'like', "%".$search."%");
             });
         }
         ! empty($filter_group) ? $query->where('group_id', $filter_group) : false;

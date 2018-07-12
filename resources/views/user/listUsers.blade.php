@@ -59,6 +59,7 @@
                             <thead>
                                 <tr>
                                     <th>Логін</th>
+                                    <th>ПІБ</th>
                                     <th>E-mail</th>
                                     <th>Група</th>
                                     <th>Ролі</th>
@@ -73,6 +74,9 @@
                                             <span class="label pull-right {{ $user->active ? 'label-success' : 'label-danger' }}">
                                                 <i class="fa {{ $user->active ? 'fa-unlock' : 'fa-lock' }} "></i>
                                             </span>
+                                        </td>
+                                        <td>
+                                            {{ $user->pib }}
                                         </td>
                                         <td>
                                             {{ $user->email }}
