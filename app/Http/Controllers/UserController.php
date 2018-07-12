@@ -69,10 +69,13 @@ class UserController extends Controller
     public function listUsers(Request $request)
     {
         $this->authorize('manage', User::class);
+
         $search = $request->get('search');
         $filter_group = $request->get('filter_group');
+
         $userGroups = auth()->user()->getAllGroups();
         $userGroupsIds = $userGroups->pluck('id');
+
         $query = User::query();
         $query->with('group.ancestors', 'roles')->whereIn('group_id', $userGroupsIds);
         if( ! empty($search)) {
@@ -83,9 +86,10 @@ class UserController extends Controller
             });
         }
         ! empty($filter_group) ? $query->where('group_id', $filter_group) : false;
+
         $users = $query->paginate(User::PAGINATE_PER_PAGE);
-        ! empty($search) ? $users->appends(compact('search')) : false;
-        ! empty($filter_group) ? $users->appends(compact('filter_group')) : false;
+        $userGroups->load('ancestors');
+
         return view('user.listUsers', compact('users', 'userGroups', 'search', 'filter_group'));
     }
 
@@ -140,6 +144,8 @@ class UserController extends Controller
         $roles = $query->paginate(Role::PAGINATE_PER_PAGE);
         ! empty($search) ? $roles->appends(compact('search')) : false;
         ! empty($filter_group) ? $roles->appends(compact('filter_group')) : false;
+
+        $userGroups->load('ancestors');
 
         return view('user.listRoles', compact('roles', 'userGroups', 'search', 'filter_group'));
     }

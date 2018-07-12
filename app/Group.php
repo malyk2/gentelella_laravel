@@ -46,9 +46,7 @@ class Group extends Model
     /**Start Mutators*/
     public function getFullNameAttribute()
     {
-        $list = $this->ancestors->pluck('name')->concat([$this->name]);
-        count($list) > 1 ? $list->shift() : false;
-        return $list->implode('-');
+        return $this->isRoot() ? $this->name : $this->ancestors->pluck('name')->concat([$this->name])->splice(1)->implode('-');
     }
 
     /**End mutators */
@@ -96,7 +94,7 @@ class Group extends Model
 
     public function isRoot()
     {
-        return $this->name == self::ROOT_NAME;
+        return $this->id == self::ROOT_ID;
     }
 
     public function canActivated()
