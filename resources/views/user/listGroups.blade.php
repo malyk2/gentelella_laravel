@@ -1,5 +1,4 @@
 @extends('layouts.app')
-{{-- @include('modules.fancytree') --}}
 @include('modules.treetable')
 @section('content')
 @push('js')
