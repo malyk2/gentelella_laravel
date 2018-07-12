@@ -15,15 +15,17 @@ use App\Group;
 */
 
 $factory->define(App\User::class, function (Faker $faker) {
+    $faker = \Faker\Factory::create('uk_UA');
     $group = Group::inRandomOrder()->first();
     return [
         'name' => $faker->name,
         'group_id' => $group->id,
         'active' => 1,
         'logout' => 0,
-        'name' => $faker->firstName(),
+        'name' => $faker->userName(),
         'email' => $faker->unique()->safeEmail,
         'password' => 'secret',
+        'pib' => $faker->name(),
         'remember_token' => str_random(10),
     ];
 });
