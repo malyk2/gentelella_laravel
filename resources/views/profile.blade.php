@@ -27,16 +27,32 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Логін
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="first-name" name="name" class="form-control col-md-7 col-xs-12 {{ $errors->has('name') ? 'parsley-error' : '' }}" value="{{ $user->name }}">
+                            <input type="text" id="first-name" name="name" class="form-control col-md-7 col-xs-12 {{ $errors->has('name') ? 'parsley-error' : '' }}" value="{{  old('name', $user->name) }}">
                             {!! formErrors('name') !!}
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Email
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pib">ПІБ
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="first-name" name="email" class="form-control col-md-7 col-xs-12 {{ $errors->has('email') ? 'parsley-error' : '' }}" value="{{ $user->email }}">
+                            <input type="text" id="pib" name="pib" class="form-control col-md-7 col-xs-12 {{ $errors->has('pib') ? 'parsley-error' : '' }}" value="{{ old('pib', $user->pib) }}">
+                            {!! formErrors('pib') !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="email" name="email" class="form-control col-md-7 col-xs-12 {{ $errors->has('email') ? 'parsley-error' : '' }}" value="{{ old('email', $user->email)  }}">
                             {!! formErrors('email') !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="position">Посада
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="position" name="position" class="form-control col-md-7 col-xs-12 {{ $errors->has('position') ? 'parsley-error' : '' }}" value="{{ old('position', $user->position) }}">
+                            {!! formErrors('position') !!}
                         </div>
                     </div>
                     <div class="ln_solid"></div>

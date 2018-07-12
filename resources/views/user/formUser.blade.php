@@ -55,11 +55,27 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">E-mail <span class="required">*</span>
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pib">ПІБ <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="pib" name="pib" class="form-control col-md-7 col-xs-12 {{ $errors->has('pib') ? 'parsley-error' : '' }}" autocomplete="nope" value="{{ old('pib', ( ! empty($item) ? $item->pib : '')) }}">
+                                    {!! formErrors('pib') !!}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">E-mail
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <input type="text" id="email" name="email" class="form-control col-md-7 col-xs-12 {{ $errors->has('email') ? 'parsley-error' : '' }}" autocomplete="nope" value="{{ old('email', ( ! empty($item) ? $item->email : '')) }}">
                                     {!! formErrors('email') !!}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="position">Посада
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="position" name="position" class="form-control col-md-7 col-xs-12 {{ $errors->has('position') ? 'parsley-error' : '' }}" autocomplete="nope" value="{{ old('position', ( ! empty($item) ? $item->position : '')) }}">
+                                    {!! formErrors('position') !!}
                                 </div>
                             </div>
                             <div class="form-group">

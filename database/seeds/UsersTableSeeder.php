@@ -18,6 +18,7 @@ class UsersTableSeeder extends Seeder
             'group_id' => Group::ROOT_ID,
             'name' => User::ROOT_NAME,
             'email' => 'admin@renome.ua',
+            'pib' => 'Адміністратор Системи',
         ];
 
         $user = User::firstOrNew($data);

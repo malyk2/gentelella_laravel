@@ -24,6 +24,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'pib',
+        'position',
         'group_id',
         'active',
         'logout',

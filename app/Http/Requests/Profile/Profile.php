@@ -25,7 +25,19 @@ class Profile extends FormRequest
     {
         return [
             'name' => 'required|unique:users,name,'.auth()->id(),
-            'email' => 'required|email',
+            'email' => 'nullable|email',
+            'pib' => 'required|max:255',
+            'position' => 'nullable|max:255',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'логін',
+            'email' => 'E-mail',
+            'pib' => 'ПІБ',
+            'position' => 'посада',
         ];
     }
 }

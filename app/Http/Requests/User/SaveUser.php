@@ -25,8 +25,10 @@ class SaveUser extends FormRequest
     {
         $rules = [
             'name' => 'required|unique:users,name'.(! empty($this->user) ? ','.$this->user->id : null),
-            'email' => 'required|email',
+            'email' => 'nullable|email',
             'group_id' => 'required',
+            'pib' => 'required|max:255',
+            'position' => 'nullable|max:255',
             'roles' => 'array',
             'active' => 'boolean',
         ];
@@ -41,6 +43,8 @@ class SaveUser extends FormRequest
             'email' => 'E-mail',
             'password' => 'пароль',
             'group_id' => 'група',
+            'pib' => 'ПІБ',
+            'position' => 'посада',
         ];
     }
 }

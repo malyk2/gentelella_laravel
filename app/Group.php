@@ -46,7 +46,9 @@ class Group extends Model
     /**Start Mutators*/
     public function getFullNameAttribute()
     {
-        return $this->ancestors->pluck('name')->concat([$this->name])->implode('-');
+        $list = $this->ancestors->pluck('name')->concat([$this->name]);
+        count($list) > 1 ? $list->shift() : false;
+        return $list->implode('-');
     }
 
     /**End mutators */
