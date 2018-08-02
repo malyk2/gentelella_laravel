@@ -1,0 +1,91 @@
+version: '2'
+services:
+    # web:
+    #     build:
+    #         context: ./
+    #         dockerfile: deploy/web.docker
+    #     volumes:
+    #         - ./:/var/www
+    #     ports:
+    #         - "8080:80"
+    #     links:
+    #         # - app
+    #         - sqlsrv
+    # app:
+    #     build:
+    #         context: ./
+    #         dockerfile: deploy/app.docker
+    #     volumes:
+    #         - ./:/var/www
+    #     # links:
+    #         #- database
+    #         # - mssql
+    #         #- mailhog
+    #     environment:
+    #         - "DB_PORT=3306"
+    #         - "DB_HOST=database"
+    #         - "REDIS_PORT=6379"
+    #         - "REDIS_HOST=cache"
+    # mailhog:
+    #         build:
+    #             context: ./
+    #             dockerfile: deploy/mailhog.docker
+    #         ports:
+    #             - "8025:8025"
+    mssql:
+        build:
+            context: ./
+            dockerfile: deploy/mssql.docker
+        ports:
+            - "14331:1433"
+        environment:
+            SA_PASSWORD: "Cnap01Cnap01"
+            ACCEPT_EULA: "Y"
+        # links:
+        #     - test
+    # httpd:
+    #     build:
+    #         context: ./
+    #         dockerfile: deploy/httpd.docker
+    #     volumes:
+    #         - ./:/var/www
+    #         # - /media/docker:/usr/local/apache2/
+    #     ports:
+    #         - "8080:80"
+    #     links:
+    #         - php
+    #     #     - sqlsrv
+    # php:
+    #     build:
+    #         context: ./
+    #         dockerfile: deploy/php.docker
+    #     ports:
+    #         - "8080:80"
+    #     volumes:
+    #         - ./:/var/www
+    #     # links:
+        #     - sqlsrv
+    # sqlsrv:
+    #     build:
+    #         context: ./
+    #         dockerfile: deploy/sqlsrv.docker
+    #     volumes:
+    #         - ./:/var/www
+    #     ports:
+    #         - "80:80"
+    #     # links:
+    #     #     - mssql
+    #     environment:
+    #         DB_HOST: "localhost"
+    #         DB_USERNAME: "sa"
+    #         DB_PASSWORD: "Cnap01Cnap01"
+    test:
+        build:
+            context: ./
+            dockerfile: deploy/test.docker
+        volumes:
+            - ./:/var/www/
+        ports:
+            - "8080:80"
+        links:
+            - mssql
